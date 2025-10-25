@@ -6,7 +6,6 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] public float speed = 6.0f;
-    [SerializeField] public float maxSpeed = 9.0f;
     
     [SerializeField] private float horizontalInput;
     [SerializeField] private float verticalInput;
