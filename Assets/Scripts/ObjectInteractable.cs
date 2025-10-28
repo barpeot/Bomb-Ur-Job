@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
-public class ObjectInteractable : MonoBehaviour
+public class ObjectInteractable : MonoBehaviour, IInteractable
 {
     //TODO: Enum Objek apa saja yang akan diimplementasikan
 

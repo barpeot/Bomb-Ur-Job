@@ -2,22 +2,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+interface IInteractable
+{
+    public void Interact();
+}
+
 public class PlayerInteractable : MonoBehaviour
 {
-    private void Update()
+    public Transform interactSource;
+    public float interactRange = 2.0f;
+
+    void Start()
+    {
+        interactSource = GetComponent<Transform>();
+    }
+
+    void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            float interactRange = 2.0f;
-            Collider[] colliderArray = Physics.OverlapSphere(transform.position, interactRange);
-            foreach(Collider collider in colliderArray)
+            // buat raycast ke depan untuk interaksi dengan objek
+            Ray r = new Ray(interactSource.position, interactSource.forward);
+            if(Physics.Raycast(r, out RaycastHit hitInfo, interactRange))
             {
-                if (collider.TryGetComponent(out ObjectInteractable item))
+                // saat terkena maka akan memanggil interact pada objek
+                if(hitInfo.collider.gameObject.TryGetComponent(out IInteractable obj))
                 {
-                    item.Interact();
+                    obj.Interact();
                 }
             }
         }
-       
     }
 }
