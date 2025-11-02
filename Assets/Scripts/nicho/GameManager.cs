@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,10 +12,10 @@ public class GameManager : MonoBehaviour
     // apakah player tidak bersembunyi
     public bool isInRangeOfCone, isDetected, isNotHidden;
 
-    // reference ke ui you lose dan ui exposed pop up
-    public GameObject youLoseUI, exposedPopUpUI;
-
     public bool isFullExposedBar = false;
+
+    // nama gameplay scene nya
+    private string gameplayScene = "scene nicho";
 
     private void Awake()
     {
@@ -29,21 +30,25 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        // pastikan semua UI inactive
-        youLoseUI.SetActive(false);
-        exposedPopUpUI.SetActive(false);
-    }
-
     // Update is called once per frame
     void Update()
     {
         if (isFullExposedBar)
         {
+            UIController.instance.youLoseUI.SetActive(true);
+            UIController.instance.exposedPopUpUI.SetActive(false);
             Time.timeScale = 0;
-            youLoseUI.SetActive(true);
-            exposedPopUpUI.SetActive(false);
         }
+    }
+
+    public void Restart()
+    {
+        // balik lagi bisa dimain kan
+        Time.timeScale = 1;
+        SceneManager.LoadScene(gameplayScene);
+        isFullExposedBar = false;
+        // all ui inactive
+        UIController.instance.youLoseUI.SetActive(false);
+        UIController.instance.exposedPopUpUI.SetActive(false);
     }
 }
