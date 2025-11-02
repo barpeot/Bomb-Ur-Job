@@ -163,4 +163,29 @@ public class EnemyVision : MonoBehaviour
         // infinite loop
         StartCoroutine(IncreaseExposedBar());
     }
+
+    private void OnDrawGizmos()
+    {
+        if (player == null) return;
+
+        Gizmos.color = Color.yellow;
+
+        Gizmos.DrawWireSphere(transform.position, detectionRange);
+
+        Vector3 leftBoundary = Quaternion.Euler(0, -detectionAngle, 0) * transform.forward;
+        Gizmos.DrawLine(transform.position, transform.position + leftBoundary * detectionRange);
+
+        Vector3 rightBoundary = Quaternion.Euler(0, detectionAngle, 0) * transform.forward;
+        Gizmos.DrawLine(transform.position, transform.position + rightBoundary * detectionRange);
+
+        if (GameManager.instance.isDetected && GameManager.instance.isNotHidden && GameManager.instance.isInRangeOfCone) 
+        {
+            Gizmos.color = Color.red;
+        }
+        else
+        {
+            Gizmos.color = Color.green;
+        }
+        Gizmos.DrawLine(transform.position, player.transform.position);
+    }
 }

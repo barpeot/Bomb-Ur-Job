@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] public float speed = 6.0f;
+    public bool canMove = true;
     
     [SerializeField] private float horizontalInput;
     [SerializeField] private float verticalInput;
@@ -48,6 +49,11 @@ public class PlayerController : MonoBehaviour
        
     }
 
+    public void setMove(bool move)
+    {
+        canMove = move;
+    }
+
     void FixedUpdate()
     {
         Vector3 movement = getMovement();
@@ -59,9 +65,11 @@ public class PlayerController : MonoBehaviour
         }
 
         //TODO movement dengan akselerasi dari starting speed ke maxspeed
-
-        rb.MovePosition(rb.position + movement * Time.fixedDeltaTime);
-        rb.MoveRotation(targetRotation);
+        if (canMove)
+        {
+            rb.MovePosition(rb.position + movement * Time.fixedDeltaTime);
+            rb.MoveRotation(targetRotation);
+        }
     }
 
 }
