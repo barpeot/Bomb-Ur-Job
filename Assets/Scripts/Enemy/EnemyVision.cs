@@ -20,9 +20,6 @@ public class EnemyVision : MonoBehaviour
     public TextMeshProUGUI isInRangeOfConeText;
     public TextMeshProUGUI isNotHiddenText;
 
-    // reference exposed UI gameobject
-    public GameObject exposedUI;
-
     // exposed bar increase speed
     [SerializeField] private float exposedBarIncreaseSpeed = 0.01f;
     [SerializeField] private float currentBarSpeed = 0f;
@@ -122,11 +119,11 @@ public class EnemyVision : MonoBehaviour
         }
 
 
-        if (GameManager.instance.isDetected && GameManager.instance.isInRangeOfCone && GameManager.instance.isNotHidden)
+        if (GameManager.instance.isDetected && GameManager.instance.isInRangeOfCone && GameManager.instance.isNotHidden && !GameManager.instance.isFullExposedBar)
         {
             // ketika exposed, maka barnya naik
             currentBarSpeed = exposedBarIncreaseSpeed;
-            exposedUI.SetActive(true);
+            UIController.instance.exposedPopUpUI.SetActive(true);
         }
         else
         {
@@ -134,7 +131,7 @@ public class EnemyVision : MonoBehaviour
             exposedBarIncreaseSpeed = 0.05f;
             secondTracker = 0f;
             currentBarSpeed = 0f;
-            exposedUI.SetActive(false);
+            UIController.instance.exposedPopUpUI.SetActive(false);
         }
     }
 
