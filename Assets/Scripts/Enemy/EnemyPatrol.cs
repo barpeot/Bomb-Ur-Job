@@ -8,6 +8,7 @@ public class EnemyPatrol : MonoBehaviour
     public int targetPoint;
     public float moveSpeed = 2.0f;
     public float rotateSpeed = 360.0f;
+    public float checkRadius = 0.5f;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +25,7 @@ public class EnemyPatrol : MonoBehaviour
             AddTargetPoint();
         }
 
+        CheckNearbyInteractables();
     }
 
     void AddTargetPoint()
@@ -48,5 +50,32 @@ public class EnemyPatrol : MonoBehaviour
         transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, rotateSpeed);
 
         transform.position = Vector3.MoveTowards(transform.position, patrolPoints[targetPoint].position, moveSpeed * Time.deltaTime);
+    }
+
+    void CheckNearbyInteractables()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, checkRadius);
+        foreach (Collider hit in hits)
+        {
+            ObjectInteractable i = hit.GetComponent<ObjectInteractable>();
+            if (i != null && i.isSabotaged)
+            {
+                Debug.Log("Enemy found sabotaged object!");
+                Die();
+                return;
+            }
+        }
+    }
+
+    void Die()
+    {
+        Debug.Log("Enemy died!");
+        Destroy(gameObject);
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, checkRadius);
     }
 }

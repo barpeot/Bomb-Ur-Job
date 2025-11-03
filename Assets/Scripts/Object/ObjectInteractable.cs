@@ -32,7 +32,6 @@ public class ObjectInteractable : MonoBehaviour, IInteractable
         {
             // saat sabotase akan berubah warna selama beberapa detik
             StartCoroutine(SabotageRoutine());
-            isSabotaged = !isSabotaged;
         } 
         else
         {
@@ -62,14 +61,9 @@ public class ObjectInteractable : MonoBehaviour, IInteractable
 
         // sabotase item selama beberapa detik
         yield return StartCoroutine(FillRadial(timeToSabotage));
-        SetSabotage(true);
-        Debug.Log("Item has been sabotage!");
 
-
-        yield return StartCoroutine(CountdownTimer(sabotageDuration));
         // setelah beberapa detik, item kembali seperti biasa
-        SetSabotage(false);
-        Debug.Log("Item has finished its sabotage!");
+        yield return StartCoroutine(CountdownTimer(sabotageDuration));
     }
 
     private IEnumerator FillRadial(float duration)
@@ -88,6 +82,7 @@ public class ObjectInteractable : MonoBehaviour, IInteractable
 
         timerUI.fillAmount = 1f;
         Debug.Log("Item has been sabotaged!");
+        SetSabotage(true);
     }
 
     private IEnumerator CountdownTimer(float duration)
@@ -105,5 +100,7 @@ public class ObjectInteractable : MonoBehaviour, IInteractable
 
         timerUI.fillAmount = 0f;
         Debug.Log("Item has stopped being sabotaged!");
+        SetSabotage(false);
+
     }
 }
