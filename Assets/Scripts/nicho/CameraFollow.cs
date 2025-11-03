@@ -9,6 +9,8 @@ public class CameraFollow : MonoBehaviour
 
     // smooth nya
     public float smoothCam = 0.3f;
+    // jarak z axis camera ke player
+    public float distToPlayer = 20.0f;
 
     // kecepatannya dibikin 0 aja
     Vector3 velocity = Vector3.zero;
@@ -17,9 +19,10 @@ public class CameraFollow : MonoBehaviour
     void LateUpdate()
     {
         float xPosition = player.transform.position.x;
+        float zPosition = player.transform.position.z - distToPlayer;
 
         // biar smooth pakai nya smoothdamp
-        Vector3 newPos = new Vector3(xPosition, transform.position.y, transform.position.z);
+        Vector3 newPos = new Vector3(xPosition, transform.position.y, zPosition);
         transform.position = Vector3.SmoothDamp(transform.position, newPos, ref velocity, smoothCam);
     }
 }

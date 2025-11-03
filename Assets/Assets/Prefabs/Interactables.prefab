@@ -198,7 +198,7 @@ MonoBehaviour:
   isSabotaged: 0
   timeToSabotage: 5
   sabotageDuration: 10
-  player: {fileID: 0}
+  player: {fileID: 6262610810723737881, guid: 88ef9aeb7a3753643b6488937cd5e817, type: 3}
   playerController: {fileID: 0}
   timerUI: {fileID: 0}
 --- !u!1 &6762628023981630578
