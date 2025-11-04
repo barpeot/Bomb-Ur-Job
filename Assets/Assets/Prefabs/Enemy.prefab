@@ -156,6 +156,7 @@ MonoBehaviour:
   targetPoint: 0
   moveSpeed: 4
   rotateSpeed: 30
+  checkRadius: 1.6
 --- !u!1 &4312035958071745888
 GameObject:
   m_ObjectHideFlags: 0
