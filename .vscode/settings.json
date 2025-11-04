@@ -51,5 +51,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Bomb-Ur-Job.sln"
+    "dotnet.defaultSolution": "Bomb-Ur-Job.sln",
+    "dotnet.preferCSharpExtension": true
 }

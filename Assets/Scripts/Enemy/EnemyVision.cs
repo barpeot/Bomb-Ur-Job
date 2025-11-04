@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class EnemyVision : MonoBehaviour
 {
     // npc keberapa
-    [SerializeField] private int npcID;
+    public int npcID;
 
     // reference ke player gameobject nya
     public GameObject player;
@@ -139,7 +139,6 @@ public class EnemyVision : MonoBehaviour
             currentBarSpeed = exposedBarIncreaseSpeed;
             // UIController.instance.exposedPopUpUI.SetActive(true);
             SetSeePlayer(true);
-            Debug.Log("masuk exposed");
         }
         else
         {
