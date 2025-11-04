@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,6 +7,9 @@ using UnityEngine.UI;
 
 public class EnemyVision : MonoBehaviour
 {
+    // npc keberapa
+    [SerializeField] private int npcID;
+
     // reference ke player gameobject nya
     public GameObject player;
 
@@ -31,6 +35,16 @@ public class EnemyVision : MonoBehaviour
     [SerializeField] private float secondTracker = 0f;
     [SerializeField] private float percepatanNambah = 0.05f;
 
+    // apakah player dalam range conenya, apakah player terdeteksi dalam cone
+    // apakah player tidak bersembunyi
+    public bool isInRangeOfCone, isDetected, isNotHidden;
+
+    // event untuk broadcast kalau npc see player
+    public static event Action<int, bool> OnPlayerVisibilityChanged;
+
+    // reference si npc lagi ngelihat player nggak
+    private bool isSeeingPlayer;
+
     private void Start()
     {
         // langsung start coroutine increase exposed barnya
@@ -46,16 +60,16 @@ public class EnemyVision : MonoBehaviour
     private void EnemyDetection()
     {
         // set semuanya false dulu
-        GameManager.instance.isInRangeOfCone = false;
-        GameManager.instance.isDetected = false;
-        GameManager.instance.isNotHidden = false;
+        isInRangeOfCone = false;
+        isDetected = false;
+        isNotHidden = false;
 
         // cek apakah jarak playernya tu kurang dari detecrange nya
         // kalau ya, maka player terdeteksi
         if (Vector3.Distance(player.transform.position, transform.position) < detectionRange)
         {
             // kedetect
-            GameManager.instance.isDetected = true;
+            isDetected = true;
 
             // set tulisan debug ui nya
             isDetectedText.text = "player detected";
@@ -76,7 +90,7 @@ public class EnemyVision : MonoBehaviour
             // kalau pas nembak raycast tu yang kenak player, maka dia nggak hide
             if (hit.transform == player.transform)
             {
-                GameManager.instance.isNotHidden = true;
+                isNotHidden = true;
                 isNotHiddenText.text = "player exposed";
                 isNotHiddenText.color = Color.red;
             }
@@ -108,7 +122,7 @@ public class EnemyVision : MonoBehaviour
         // kalau diantara -45 hingga 45 maka in range
         if (angle < detectionAngle && angle > detectionAngle * -1)
         {
-            GameManager.instance.isInRangeOfCone = true;
+            isInRangeOfCone = true;
             isInRangeOfConeText.text = "player in detection angle";
             isInRangeOfConeText.color = Color.red;
         }
@@ -119,11 +133,13 @@ public class EnemyVision : MonoBehaviour
         }
 
 
-        if (GameManager.instance.isDetected && GameManager.instance.isInRangeOfCone && GameManager.instance.isNotHidden && !GameManager.instance.isFullExposedBar)
+        if (isDetected && isInRangeOfCone && isNotHidden && !GameManager.instance.isFullExposedBar)
         {
             // ketika exposed, maka barnya naik
             currentBarSpeed = exposedBarIncreaseSpeed;
-            UIController.instance.exposedPopUpUI.SetActive(true);
+            // UIController.instance.exposedPopUpUI.SetActive(true);
+            SetSeePlayer(true);
+            Debug.Log("masuk exposed");
         }
         else
         {
@@ -131,7 +147,8 @@ public class EnemyVision : MonoBehaviour
             exposedBarIncreaseSpeed = 0.05f;
             secondTracker = 0f;
             currentBarSpeed = 0f;
-            UIController.instance.exposedPopUpUI.SetActive(false);
+            // UIController.instance.exposedPopUpUI.SetActive(false);
+            SetSeePlayer(false);
         }
     }
 
@@ -161,28 +178,40 @@ public class EnemyVision : MonoBehaviour
         StartCoroutine(IncreaseExposedBar());
     }
 
-    private void OnDrawGizmos()
+    // method dipanggil kalau npc see player
+    public void SetSeePlayer(bool seeing)
     {
-        if (player == null) return;
+        if (isSeeingPlayer == seeing) return; // biar nggak ngespam
 
-        Gizmos.color = Color.yellow;
+        // set apakah lagi ngelihat
+        isSeeingPlayer = seeing;
 
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
-
-        Vector3 leftBoundary = Quaternion.Euler(0, -detectionAngle, 0) * transform.forward;
-        Gizmos.DrawLine(transform.position, transform.position + leftBoundary * detectionRange);
-
-        Vector3 rightBoundary = Quaternion.Euler(0, detectionAngle, 0) * transform.forward;
-        Gizmos.DrawLine(transform.position, transform.position + rightBoundary * detectionRange);
-
-        if (GameManager.instance.isDetected && GameManager.instance.isNotHidden && GameManager.instance.isInRangeOfCone) 
-        {
-            Gizmos.color = Color.red;
-        }
-        else
-        {
-            Gizmos.color = Color.green;
-        }
-        Gizmos.DrawLine(transform.position, player.transform.position);
+        // invoke event pas dia ngelihat
+        OnPlayerVisibilityChanged?.Invoke(npcID, isSeeingPlayer);
     }
+
+    // private void OnDrawGizmos()
+    // {
+    //     if (player == null) return;
+
+    //     Gizmos.color = Color.yellow;
+
+    //     Gizmos.DrawWireSphere(transform.position, detectionRange);
+
+    //     Vector3 leftBoundary = Quaternion.Euler(0, -detectionAngle, 0) * transform.forward;
+    //     Gizmos.DrawLine(transform.position, transform.position + leftBoundary * detectionRange);
+
+    //     Vector3 rightBoundary = Quaternion.Euler(0, detectionAngle, 0) * transform.forward;
+    //     Gizmos.DrawLine(transform.position, transform.position + rightBoundary * detectionRange);
+
+    //     if (GameManager.instance.isDetected && GameManager.instance.isNotHidden && GameManager.instance.isInRangeOfCone) 
+    //     {
+    //         Gizmos.color = Color.red;
+    //     }
+    //     else
+    //     {
+    //         Gizmos.color = Color.green;
+    //     }
+    //     Gizmos.DrawLine(transform.position, player.transform.position);
+    // }
 }

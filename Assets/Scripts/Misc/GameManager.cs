@@ -8,14 +8,13 @@ public class GameManager : MonoBehaviour
     // singleton
     public static GameManager instance;
 
-    // apakah player dalam range conenya, apakah player terdeteksi dalam cone
-    // apakah player tidak bersembunyi
-    public bool isInRangeOfCone, isDetected, isNotHidden;
-
     public bool isFullExposedBar = false;
 
     // nama gameplay scene nya
     private string gameplayScene = "scene nicho";
+
+    // daftar npc yang ngelihat player
+    private HashSet<int> npcSeeingPlayer = new HashSet<int>();
 
     private void Awake()
     {
@@ -30,9 +29,36 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnEnable() {
+        // subscribe ke enemyvision. kaya lagi ngeset kuping buat
+        // ndengerin npc. kalau kedengeran, maka ngapain
+        // maka akan munculin pop up exposed
+        EnemyVision.OnPlayerVisibilityChanged += HandlePlayerVisibilityChanged;
+    }
+
+    private void OnDisable() {
+        // nggak usah subscribe lagi kalau diancurin
+        EnemyVision.OnPlayerVisibilityChanged -= HandlePlayerVisibilityChanged;
+    }
+
+    private void HandlePlayerVisibilityChanged(int npcID, bool seeing)
     {
+        if (seeing) npcSeeingPlayer.Add(npcID);
+        else npcSeeingPlayer.Remove(npcID);
+
+        // kita munculin atau sembunyiin sesuai dengan ada tidaknya npc
+        // yang ngelihat player
+        UpdateExposedPopUp();
+    }
+
+    private void UpdateExposedPopUp()
+    {
+        // kita ambil dulu berapa banyak npc yang ngelihat plauyer
+        bool anySeeingPlayer = npcSeeingPlayer.Count > 0;
+
+        if (UIController.instance != null)
+            UIController.instance.exposedPopUpUI.SetActive(anySeeingPlayer);
+        
         if (isFullExposedBar)
         {
             UIController.instance.youLoseUI.SetActive(true);
