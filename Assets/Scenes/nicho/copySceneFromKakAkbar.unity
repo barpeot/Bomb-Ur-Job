@@ -2817,8 +2817,8 @@ GameObject:
   - component: {fileID: 1680885154}
   - component: {fileID: 1680885153}
   - component: {fileID: 1680885152}
-  - component: {fileID: 1680885150}
   - component: {fileID: 1680885156}
+  - component: {fileID: 1680885157}
   m_Layer: 0
   m_Name: Enemy (1)
   m_TagString: Untagged
@@ -2826,31 +2826,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1680885150
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1680885149}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5c5b197ed4c60e4098867b44e615c47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  patrolPoints:
-  - {fileID: 326975755}
-  - {fileID: 2092012518}
-  - {fileID: 1154681610}
-  targetPoint: 0
-  moveSpeed: 4
-  rotateSpeed: 30
-  checkRadius: 5
-  agent: {fileID: 0}
-  player: {fileID: 1276283349}
-  isSeeing: 0
-  targetPosition: {x: 0, y: 0, z: 0}
-  currentTarget: {x: 0, y: 0, z: 0}
 --- !u!136 &1680885152
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2962,6 +2937,28 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1680885157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1680885149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14d1402d3f6fefc4592940db80ef840f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  patrolPoints:
+  - {fileID: 1154681610}
+  - {fileID: 2092012518}
+  - {fileID: 326975755}
+  player: {fileID: 1276283349}
+  agent: {fileID: 0}
+  waitTimeAtPoint: 1
+  npcID: 0
+  checkRadius: 2
+  checkDuration: 2
 --- !u!1 &1705849370
 GameObject:
   m_ObjectHideFlags: 0
@@ -4429,6 +4426,28 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1918981421004770045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1439553198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14d1402d3f6fefc4592940db80ef840f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  patrolPoints:
+  - {fileID: 1344067482}
+  - {fileID: 1154681610}
+  - {fileID: 2092012518}
+  player: {fileID: 1276283349}
+  agent: {fileID: 0}
+  waitTimeAtPoint: 1
+  npcID: 0
+  checkRadius: 2
+  checkDuration: 2
 --- !u!1001 &4035562753185631018
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4713,12 +4732,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7457593091272514314, guid: d93827e9950417346b0942d63e501dd4, type: 3}
+    - {fileID: 2249128162182038547, guid: d93827e9950417346b0942d63e501dd4, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3191612677963418626, guid: d93827e9950417346b0942d63e501dd4, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1918981421004770044}
+    - targetCorrespondingSourceObject: {fileID: 3191612677963418626, guid: d93827e9950417346b0942d63e501dd4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1918981421004770045}
     - targetCorrespondingSourceObject: {fileID: 4312035958071745888, guid: d93827e9950417346b0942d63e501dd4, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1491005662}

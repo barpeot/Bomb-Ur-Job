@@ -13,7 +13,7 @@ public class EnemyPatrol : MonoBehaviour
 
     // kode nicho untuk chasing player
     // reference ke navmesh agentnya
-    public NavMeshAgent agent;
+    // public NavMeshAgent agent;
 
     // reference ke player
     public Transform player;
@@ -41,7 +41,7 @@ public class EnemyPatrol : MonoBehaviour
 
     private void Awake()
     {
-        agent = GetComponent<NavMeshAgent>();
+        // agent = GetComponent<NavMeshAgent>();
         npcID = GetComponentInChildren<EnemyVision>().npcID;
     }
 
@@ -111,14 +111,14 @@ public class EnemyPatrol : MonoBehaviour
         Quaternion lookRotation = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, rotateSpeed);
 
-        // transform.position = Vector3.MoveTowards(transform.position, patrolPoints[targetPoint].position, moveSpeed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, patrolPoints[targetPoint].position, moveSpeed * Time.deltaTime);
         // kode nicho untuk chasing player
         // instead of we use a regular movetowards, we use it's agent to 
         // chase player
-        agent.SetDestination(targetPosition);
+        // agent.SetDestination(targetPosition);
 
         // kalau udah sampe, maka change route
-        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance && !changeRoute) StartCoroutine(ChangeRouteCoroutine());
+        // if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance && !changeRoute) StartCoroutine(ChangeRouteCoroutine());
         // end of kode nicho
     }
 
@@ -154,6 +154,7 @@ public class EnemyPatrol : MonoBehaviour
         Collider[] hits = Physics.OverlapSphere(transform.position, checkRadius);
         foreach (Collider hit in hits)
         {
+            Debug.Log($"nama hit = {hit.gameObject.name}");
             ObjectInteractable i = hit.GetComponent<ObjectInteractable>();
             if (i != null && i.isSabotaged)
             {
