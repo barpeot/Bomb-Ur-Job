@@ -86,9 +86,9 @@ public class OfficeGenerator : MonoBehaviour
         }
 
         // generate cubiclenya
-        for (int x = 1; x < width - 1; x++) // di tengah, bukan wallnya
+        for (int x = 2; x < width - 2; x++) // di tengah, bukan wallnya
         {
-            for (int y = 1; y < height - 1; y++)
+            for (int y = 2; y < height - 2; y++)
             {
                 if (Random.value < 0.25f) // peluang kemunculan 25%
                 {
@@ -114,6 +114,7 @@ public class OfficeGenerator : MonoBehaviour
                     fotocopyMachineCount < 2 && (x == 1 || x == width - 1 ||
                     y == 1 || y == height - 1))
                 {
+                    grid[x, y] = CellType.NotEmpty;
                     SpawnPrefab(fotocopyMachinePrefab, x, y);
                     fotocopyMachineCount++;
                 }
@@ -126,9 +127,12 @@ public class OfficeGenerator : MonoBehaviour
             for (int y = 1; y < height - 1; y++)
             {
                 // kalau empty dan peluangnya adalah 10%
-                if (grid[x, y] == CellType.Empty && Random.value < 0.1f)
+                // cuma dipinggir dan kalau empty doang
+                if (grid[x, y] == CellType.Empty && Random.value < 0.1f &&
+                    (x == 1 || x == width - 1 || y == 1 || y == height - 1))
                 {
                     // random deco yang mau di spawn
+                    grid[x, y] = CellType.NotEmpty;
                     GameObject deco = decorPrefabs[Random.Range(0, decorPrefabs.Length)];
                     SpawnPrefab(deco, x, y);
                 }
