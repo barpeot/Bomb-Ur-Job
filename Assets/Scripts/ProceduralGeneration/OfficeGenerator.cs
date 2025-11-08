@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SearchService;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class OfficeGenerator : MonoBehaviour
 {
@@ -28,6 +30,11 @@ public class OfficeGenerator : MonoBehaviour
     public GameObject fotocopyMachinePrefab;
     // floornya
     public GameObject floorPrefab;
+    // player 
+    public GameObject playerPrefab;
+    // camera
+    public Camera cam;
+
     // daftar dekorasinya
     public GameObject[] decorPrefabs;
 
@@ -39,6 +46,7 @@ public class OfficeGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        cam = Camera.main;
         GenerateOffice();
     }
 
