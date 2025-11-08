@@ -28,16 +28,6 @@ public class OfficeGenerator : MonoBehaviour
     public GameObject computerPrefab;
     // printernya
     public GameObject fotocopyMachinePrefab;
-<<<<<<< HEAD
-    // floornya
-    public GameObject floorPrefab;
-    // player 
-    public GameObject playerPrefab;
-    // camera
-    public Camera cam;
-
-=======
->>>>>>> d682ff937039b1085f8b5f61d9a08241bdc4a4d0
     // daftar dekorasinya
     public GameObject[] decorPrefabs;
 
@@ -49,7 +39,6 @@ public class OfficeGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        cam = Camera.main;
         GenerateOffice();
     }
 
