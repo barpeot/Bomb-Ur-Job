@@ -28,6 +28,7 @@ public class OfficeGenerator : MonoBehaviour
     public GameObject computerPrefab;
     // printernya
     public GameObject fotocopyMachinePrefab;
+<<<<<<< HEAD
     // floornya
     public GameObject floorPrefab;
     // player 
@@ -35,6 +36,8 @@ public class OfficeGenerator : MonoBehaviour
     // camera
     public Camera cam;
 
+=======
+>>>>>>> d682ff937039b1085f8b5f61d9a08241bdc4a4d0
     // daftar dekorasinya
     public GameObject[] decorPrefabs;
 
@@ -63,33 +66,21 @@ public class OfficeGenerator : MonoBehaviour
         {
             for (int y = 0; y < height; y++) // sumbu y
             {
-                if ((x == 0 && y == height / 2) || (x == width - 1 && y == height / 2))
+                if ((x == 0) || (x == width - 1))
                 {
                     // kalau di tepi, maka wall
+                    // tepi kanan kiri
                     grid[x, y] = CellType.Wall;
                     SpawnWallPrefab(wallVerticalPrefab, x, y);
                 }
-                else if ((x == width / 2 && y == 0) || (x == width / 2 && y == height - 1))
+                else if ((y == 0) || (y == height - 1))
                 {
                     // kalau di tepi, maka wall
+                    // tepi atas bawah
                     grid[x, y] = CellType.Wall;
                     SpawnWallPrefab(wallHorizontalPrefab, x, y);
                 }
                 else grid[x, y] = CellType.Empty; // kalau nggak ya dia empty
-            }
-        }
-
-        // generate floornya
-        for (int x = 0; x < width; x++) // sumbu x
-        {
-            for (int y = 0; y < height; y++) // sumbu y
-            {
-                if (x == width / 2 && y == height / 2)
-                {
-                    // kalau di tepi, maka wall
-                    grid[x, y] = CellType.Empty;
-                    SpawnPrefab(floorPrefab, x, y);
-                }
             }
         }
 

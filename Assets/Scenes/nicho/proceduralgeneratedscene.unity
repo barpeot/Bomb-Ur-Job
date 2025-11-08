@@ -264,7 +264,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &177899520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -787,6 +787,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ab45c985b928224ebefc02d689557ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isInRangeOfCone: 0
+  isDetected: 0
+  isNotHidden: 0
   isFullExposedBar: 0
 --- !u!4 &644790685
 Transform:
@@ -1627,7 +1630,6 @@ MonoBehaviour:
   m_Size: {x: 10, y: 10, z: 10}
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
-    serializedVersion: 2
     m_Bits: 64
   m_UseGeometry: 0
   m_DefaultArea: 0
@@ -1641,6 +1643,8 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: ec2c8f64fb4145e4e8db492cae9fc664, type: 2}
   m_BuildHeightMesh: 0
+  m_LastPosition: {x: 0, y: 0, z: 0}
+  m_LastRotation: {x: 0, y: 0, z: 0, w: 1}
 --- !u!4 &1303740270
 Transform:
   m_ObjectHideFlags: 0
@@ -2174,7 +2178,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 908c4e66858e2e441906ac3d34c5731b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  npcID: 1
   player: {fileID: 1276283342}
   detectionRange: 10
   detectionAngle: 45
@@ -2186,9 +2189,6 @@ MonoBehaviour:
   exposedBarImage: {fileID: 741204699}
   secondTracker: 0
   percepatanNambah: 0.05
-  isInRangeOfCone: 0
-  isDetected: 0
-  isNotHidden: 0
 --- !u!1 &1439553198 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3191612677963418626, guid: d93827e9950417346b0942d63e501dd4, type: 3}
@@ -2211,7 +2211,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 908c4e66858e2e441906ac3d34c5731b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  npcID: 0
   player: {fileID: 1276283342}
   detectionRange: 10
   detectionAngle: 45
@@ -2223,9 +2222,6 @@ MonoBehaviour:
   exposedBarImage: {fileID: 741204699}
   secondTracker: 0
   percepatanNambah: 0.05
-  isInRangeOfCone: 0
-  isDetected: 0
-  isNotHidden: 0
 --- !u!1 &1516034196
 GameObject:
   m_ObjectHideFlags: 0
