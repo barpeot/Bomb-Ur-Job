@@ -138,7 +138,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &68420429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -264,7 +264,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &177899520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,22 +277,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1440ec5e140b3fb4aadb77e6172817f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 15
-  height: 15
+  patrolPointCountSmall: 2
+  patrolPointCountMedium: 3
+  patrolPointCountLarge: 3
+  minInteractablesCountSmall: 5
+  maxInteractablesCountSmall: 6
+  minInteractablesCountMedium: 5
+  maxInteractablesCountMedium: 8
+  minInteractablesCountLarge: 6
+  maxInteractablesCountLarge: 8
+  obstacleWallCountSmall: 2
+  obstacleWallCountMedium: 4
+  obstacleWallCountLarge: 4
+  smallGridCount: 16
+  mediumGridCount: 18
+  largeGridCount: 22
+  smallScaleSize: 60
+  mediumScaleSize: 80
+  largeScaleSize: 100
+  widthGridCount: 10
+  heightGridCount: 10
   cellSize: 3.5
   seed: 0
   usedSeed: 0
-  wallVerticalPrefab: {fileID: 1921019068354181779, guid: 5207528b0ae03cf4a8d3091b535de20a, type: 3}
-  wallHorizontalPrefab: {fileID: 1921019068354181779, guid: e7afc4777e7f6b447b1456f0bc1fbea5, type: 3}
-  cubiclePrefab: {fileID: 9113701611308672135, guid: 5ac48799704f20443b04d2277e188e80, type: 3}
-  computerPrefab: {fileID: 541988658578683419, guid: bd9a6750ef103a54f83554e8a8888df1, type: 3}
-  fotocopyMachinePrefab: {fileID: 1896733367277556835, guid: 5a75b2feb8bf0e64a8706ad445881382, type: 3}
-  floorPrefab: {fileID: 7026110368157554717, guid: cd9faffbd43e4cd4893b3d071a2aafb1, type: 3}
-  playerPrefab: {fileID: 0}
-  cam: {fileID: 0}
-  decorPrefabs:
-  - {fileID: 3761872798402202394, guid: 7b9bb6b0189d0aa4bb837759b3b5c276, type: 3}
-  - {fileID: 6473434800512307613, guid: cd29cdbc3f9627549af7a4ad9331aff1, type: 3}
+  floorPlanePrefab: {fileID: 1301399482602404932, guid: 477db6b0536068a4eac9992bdd93d917, type: 3}
+  wallPrefab: {fileID: 3788113277407846468, guid: c013f500a253d97408b82690571d0ca4, type: 3}
+  obstacleWallPrefab: {fileID: 3788113277407846468, guid: c013f500a253d97408b82690571d0ca4, type: 3}
+  computerPrefab: {fileID: 4080137298114015133, guid: d459b0fbbcb20f144a17d54ed3cba097, type: 3}
+  cubiclePrefab: {fileID: 4960876983693365434, guid: e08e98cdbeff3ab4c9ab7e4a3498f4af, type: 3}
+  officePrinterPrefab: {fileID: 2549341033246718198, guid: 266a093e69588094682ac2f9b382bdc5, type: 3}
+  waterDispenserPrefab: {fileID: 2761856607392467045, guid: aa324bfa32ad9e043b8edc2cbc2459e3, type: 3}
+  patrolPointPrefab: {fileID: 6119727039849722187, guid: 94d09c84ab4e2f64c959bbf216beccb0, type: 3}
+  couchPrefab: {fileID: 6919457200339091658, guid: 3f2a382cd0ae2cd488db7c940007a504, type: 3}
+  fillingCabinetPrefab: {fileID: 1797470807662847175, guid: ae8ffcfe15a91154aa91dc4c2ddd7baa, type: 3}
+  vendingMachinePrefab: {fileID: 2041307478406363794, guid: 17ab1af4bdf9d364f9ceeb2ad49ecea7, type: 3}
 --- !u!4 &177899521
 Transform:
   m_ObjectHideFlags: 0
@@ -787,9 +805,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ab45c985b928224ebefc02d689557ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isInRangeOfCone: 0
-  isDetected: 0
-  isNotHidden: 0
   isFullExposedBar: 0
 --- !u!4 &644790685
 Transform:
@@ -1630,6 +1645,7 @@ MonoBehaviour:
   m_Size: {x: 10, y: 10, z: 10}
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
+    serializedVersion: 2
     m_Bits: 64
   m_UseGeometry: 0
   m_DefaultArea: 0
@@ -1643,8 +1659,6 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: ec2c8f64fb4145e4e8db492cae9fc664, type: 2}
   m_BuildHeightMesh: 0
-  m_LastPosition: {x: 0, y: 0, z: 0}
-  m_LastRotation: {x: 0, y: 0, z: 0, w: 1}
 --- !u!4 &1303740270
 Transform:
   m_ObjectHideFlags: 0
@@ -2178,6 +2192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 908c4e66858e2e441906ac3d34c5731b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  npcID: 0
   player: {fileID: 1276283342}
   detectionRange: 10
   detectionAngle: 45
@@ -2189,6 +2204,9 @@ MonoBehaviour:
   exposedBarImage: {fileID: 741204699}
   secondTracker: 0
   percepatanNambah: 0.05
+  isInRangeOfCone: 0
+  isDetected: 0
+  isNotHidden: 0
 --- !u!1 &1439553198 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3191612677963418626, guid: d93827e9950417346b0942d63e501dd4, type: 3}
@@ -2211,6 +2229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 908c4e66858e2e441906ac3d34c5731b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  npcID: 0
   player: {fileID: 1276283342}
   detectionRange: 10
   detectionAngle: 45
@@ -2222,6 +2241,9 @@ MonoBehaviour:
   exposedBarImage: {fileID: 741204699}
   secondTracker: 0
   percepatanNambah: 0.05
+  isInRangeOfCone: 0
+  isDetected: 0
+  isNotHidden: 0
 --- !u!1 &1516034196
 GameObject:
   m_ObjectHideFlags: 0
