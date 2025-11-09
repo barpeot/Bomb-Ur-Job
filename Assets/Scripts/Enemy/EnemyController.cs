@@ -12,6 +12,7 @@ public class EnemyController : MonoBehaviour
     public Transform player;
     // navmesh agent nya
     public NavMeshAgent agent;
+    public GameObject explosionAsset;
 
     // [Header("State Machine")]
     // enemy state machine nya
@@ -84,6 +85,7 @@ public class EnemyController : MonoBehaviour
     
     public void Die()
     {
+        Instantiate(explosionAsset, transform.position, Quaternion.identity, null);
         Debug.Log($"Enemy {name} died!");
         Destroy(gameObject);
     }
