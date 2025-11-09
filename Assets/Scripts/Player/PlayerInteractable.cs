@@ -19,6 +19,7 @@ public class PlayerInteractable : MonoBehaviour
     {
         interactSource = GetComponent<Transform>();
         //interactUI dinonaktifkan
+        
     }
 
     void Update()
