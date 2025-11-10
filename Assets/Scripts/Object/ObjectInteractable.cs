@@ -45,14 +45,6 @@ public class ObjectInteractable : MonoBehaviour, IInteractable
         //TODO: Saat dilakukan sabotase objeknya akan berubah sedikit?
 
         isSabotaged = state;
-        if(isSabotaged)
-        {
-            rend.material.color = Color.red;
-        } 
-        else
-        {
-            rend.material.color = Color.white;
-        }
     }
 
     private IEnumerator SabotageRoutine()
