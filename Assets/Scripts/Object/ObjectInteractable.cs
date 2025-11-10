@@ -19,6 +19,7 @@ public class ObjectInteractable : MonoBehaviour, IInteractable
 
     private void Start()
     {
+        player = GameManager.instance.player;
         rend = GetComponent<Renderer>();
         // timerUI = transform.Find("TimerUICanvas/TimerUI").GetComponent<Image>();
         playerController = player.GetComponent<PlayerController>();

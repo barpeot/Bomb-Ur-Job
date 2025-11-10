@@ -6,6 +6,11 @@ using static UnityEditor.PlayerSettings;
 
 public class OfficeGenerator : MonoBehaviour
 {
+    [Header("Non Interactables Count")]
+    public int nonInteractablesCountSmall = 3;
+    public int nonInteractablesCountMedium = 4;
+    public int nonInteractablesCountLarge = 4;
+
     [Header("Patrol Point Count")]
     public int patrolPointCountSmall = 2;
     public int patrolPointCountMedium = 3;
@@ -73,11 +78,7 @@ public class OfficeGenerator : MonoBehaviour
     [Header("Prefabs Non Interactables")]
     // list prefabnya
     // couchnya
-    public GameObject couchPrefab;
-    // filling cabinetnya
-    public GameObject fillingCabinetPrefab;
-    // vending machinenya
-    public GameObject vendingMachinePrefab;
+    public GameObject[] nonInteractablesList;
 
     // tipe cellnya, kosong atau cubiclenya atau wallnya
     private enum CellType { Empty, Cubicle, Wall, NotEmpty }
@@ -105,6 +106,9 @@ public class OfficeGenerator : MonoBehaviour
         // reference ke jumlah patrol points nya
         float patrolPointCount = 0f;
 
+        // reference ke jumlah non interactablesnya
+        float nonInteractablesCount = 0f;
+
         // random dulu ukuran width dan heightnya
         MapSize randomSize = (MapSize)Random.Range(0, System.Enum.GetValues(typeof(MapSize)).Length);
         switch (randomSize)
@@ -116,6 +120,7 @@ public class OfficeGenerator : MonoBehaviour
                 minInteractables = minInteractablesCountSmall;
                 maxInteractables = maxInteractablesCountSmall;
                 patrolPointCount = patrolPointCountSmall;
+                nonInteractablesCount = nonInteractablesCountSmall;
                 break;
             case MapSize.Medium: // kalau medium 18
                 widthGridCount = heightGridCount = mediumGridCount;
@@ -124,6 +129,7 @@ public class OfficeGenerator : MonoBehaviour
                 minInteractables = minInteractablesCountMedium;
                 maxInteractables = maxInteractablesCountMedium;
                 patrolPointCount = patrolPointCountMedium;
+                nonInteractablesCount = nonInteractablesCountMedium;
                 break;
             case MapSize.Large: // kalau large 22
                 widthGridCount = heightGridCount = largeGridCount;
@@ -132,6 +138,7 @@ public class OfficeGenerator : MonoBehaviour
                 minInteractables = minInteractablesCountLarge;
                 maxInteractables = maxInteractablesCountLarge;
                 patrolPointCount = patrolPointCountLarge;
+                nonInteractablesCount = nonInteractablesCountLarge;
                 break;
         }
 
@@ -161,6 +168,64 @@ public class OfficeGenerator : MonoBehaviour
 
         // generate patrol point kosong nya
         GeneratePatrolPoints((int)patrolPointCount);
+
+        // generate non interactablesnya
+        GenerateNonInteractables((int)nonInteractablesCount);
+
+        // bikin pathway untuk npc (3) dan player 1 (2x2 saja)
+        // player
+        SpawnWall(floorPlanePrefab, (widthGridCount / 2) - 1, -2, 2, 2);
+        // npc atas
+        SpawnWall(floorPlanePrefab, (widthGridCount / 2) - 1, heightGridCount, 2, 2);
+        // npc kiri
+        SpawnWall(floorPlanePrefab, -2, (heightGridCount / 2) - 1, 2, 2);
+        // npc kanan
+        SpawnWall(floorPlanePrefab, heightGridCount, (heightGridCount / 2) - 1, 2, 2);
+
+        
+    }
+
+    private void GenerateNonInteractables(int count)
+    {
+        int spawned = 0;
+        while (spawned < count)
+        {
+            for (int x = 1; x < widthGridCount - 1; x++)
+            {
+                for (int y = 1; y < heightGridCount - 1; y++)
+                {
+                    // rules = x = 1-2
+                    //         y = 1-2
+                    if (grid[x, y] == CellType.Empty &&
+                    (x == 1 || x == 2 || x == widthGridCount - 1 || x == widthGridCount - 2) &&
+                    (y == 1 || y == 2 || y == heightGridCount - 1 || y == heightGridCount - 2) && 
+                    (spawned < count))
+                    {
+                        // random dulu mau yang mana
+                        int randomIndex = Random.Range(0, nonInteractablesList.Length);
+
+                        // 0 = couch
+                        // 1 = cabinet
+                        // 2 = vending machine
+
+                        // peluang nya
+                        bool peluangNon = Random.value < 0.01f;
+                        if (peluangNon)
+                        {
+                            // random rotasinya
+                            int[] angles = { 0, 90, 180, 270 };
+                            float rotY = angles[Random.Range(0, angles.Length)];
+
+                            SpawnPrefab(nonInteractablesList[randomIndex], x, y, Quaternion.Euler(0, rotY, 0));
+                            spawned++;
+
+                            // tag cell nya
+                            grid[x, y] = CellType.NotEmpty;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void GeneratePatrolPoints(int count)
@@ -283,6 +348,8 @@ public class OfficeGenerator : MonoBehaviour
             Debug.Log($"startingX = {startingX}");
 
             // random rotasinya
+            // 180 =  hadap z
+            // 0 = hadap -z
             float rotY = Random.value > 0.5f ? 0f : 180f;
 
             for (int i = 0; i < deret; i++)
@@ -290,7 +357,8 @@ public class OfficeGenerator : MonoBehaviour
                 // mulai spawn
                 if (grid[(int)startingX, (int)row] == CellType.Empty && cubicleSpawned < cubicleCount)
                 {
-                    SpawnPrefab(cubiclePrefab, (int)startingX, (int)row, Quaternion.Euler(0, rotY, 0));
+                    Vector3 padding = rotY == 180f ? new Vector3(0.08f, 0f, 0.25f) : new Vector3(-0.08f, 0f, -0.25f);
+                    SpawnCubicleComputer("cubicle", (int)startingX, (int)row, rotY);
                     grid[(int)startingX, (int)row] = CellType.Cubicle;
 
                     // spawn juga computernya dengan peluang 60%
@@ -299,7 +367,7 @@ public class OfficeGenerator : MonoBehaviour
                     {
                         // random rotasinya
                         float rotComY = rotY == 180f ? 270f : 90f;
-                        SpawnPrefab(computerPrefab, (int)startingX, (int)row, Quaternion.Euler(0, rotComY, 0));
+                        SpawnCubicleComputer("computer", (int)startingX, (int)row, rotComY);
                     }
 
                     // tambahin cubiclespawnednya
@@ -366,6 +434,52 @@ public class OfficeGenerator : MonoBehaviour
     {
         // posisi spawnnya
         Vector3 pos = new Vector3(x * cellSize, prefab.transform.position.y, y * cellSize);
+        Instantiate(prefab, pos, rotation, transform);
+    }
+
+    private void SpawnCubicleComputer(string cubiOrCompu, int x, int y, float rotY)
+    {
+        // offset dasar cubicle
+        float offsetZ = 0.28f;
+        float offsetX = 0.1f;
+
+        // offset dasar computer
+        float offsetZCompu = 0.28f;
+        float offsetXCompu = -0.1f;
+
+        Vector3 padding = Vector3.zero;
+
+        if (cubiOrCompu == "cubicle")
+        {
+            // Cubicle: posisinya di "tepi luar"
+            if (Mathf.Approximately(rotY, 0f))
+                padding = new Vector3(offsetX, 0f, offsetZ);   // menghadap +Z → cubicle di bawah (Z+)
+            else if (Mathf.Approximately(rotY, 180f))
+                padding = new Vector3(-offsetX, 0f, -offsetZ); // menghadap -Z → cubicle di atas (Z-)
+        }
+        else if (cubiOrCompu == "computer")
+        {
+            // Computer: posisinya di "dalam" cubicle (berlawanan arah)
+            if (Mathf.Approximately(rotY, 90f))
+                padding = new Vector3(-offsetXCompu, 0f, offsetZCompu); // di dalam cubicle yang hadap -Z
+            else if (Mathf.Approximately(rotY, 270f))
+                padding = new Vector3(offsetXCompu, 0f, -offsetZCompu);   // di dalam cubicle yang hadap +Z
+        }
+
+        SpawnPrefab(
+            cubiOrCompu == "cubicle" ? cubiclePrefab : computerPrefab,
+            x, y, Quaternion.Euler(0, rotY, 0), padding
+        );
+    }
+
+    private void SpawnPrefab(GameObject prefab, int x, int y, Quaternion rotation, Vector3 padding)
+    {
+        Vector3 pos = new Vector3(
+            (x * cellSize) + (padding.x * cellSize),
+            prefab.transform.position.y,
+            (y * cellSize) + (padding.z * cellSize)
+        );
+
         Instantiate(prefab, pos, rotation, transform);
     }
 

@@ -28,7 +28,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 967574107565743911}
   m_LocalRotation: {x: -0, y: -0.0956997, z: -0, w: 0.9954103}
-  m_LocalPosition: {x: 0, y: 0, z: 1.7210598}
+  m_LocalPosition: {x: 0, y: 0, z: -1.09}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -37,7 +37,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 6.5576563, y: 4.180441}
+  m_AnchoredPosition: {x: -0.34, y: 3.26}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &2419838850279024367
@@ -127,6 +127,8 @@ GameObject:
   - component: {fileID: 1885963640804067194}
   - component: {fileID: 6134316685691759132}
   - component: {fileID: 3959519392608181851}
+  - component: {fileID: 2378040303672423961}
+  - component: {fileID: 6179995684858934586}
   m_Layer: 0
   m_Name: Computer
   m_TagString: Untagged
@@ -200,6 +202,45 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2378040303672423961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3566920853285710516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f1b85f639955f9409821c9b9a451b74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isSabotaged: 0
+  timeToSabotage: 2
+  sabotageDuration: 10
+  player: {fileID: 0}
+  playerController: {fileID: 0}
+  timerUI: {fileID: 4442911555089515808}
+--- !u!65 &6179995684858934586
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3566920853285710516}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.046657458, y: 0.0249417, z: 0.042994667}
+  m_Center: {x: 0.008230668, y: -0.0020107534, z: -0.005615991}
 --- !u!1 &4080137298114015133
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,7 +250,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1960320316074968044}
-  - component: {fileID: 3552910156737270378}
   m_Layer: 0
   m_Name: Komputerwithoutcubicle
   m_TagString: Untagged
@@ -235,24 +275,6 @@ Transform:
   - {fileID: 9014264663856391352}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!114 &3552910156737270378
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4080137298114015133}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f1b85f639955f9409821c9b9a451b74, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isSabotaged: 0
-  timeToSabotage: 2
-  sabotageDuration: 10
-  player: {fileID: 0}
-  playerController: {fileID: 0}
-  timerUI: {fileID: 4442911555089515808}
 --- !u!1 &4905347260377606073
 GameObject:
   m_ObjectHideFlags: 0
@@ -339,7 +361,6 @@ GameObject:
   - component: {fileID: 5094805590965199034}
   - component: {fileID: 4998838745348515279}
   - component: {fileID: 8949072107017810150}
-  - component: {fileID: 8524290557846476098}
   m_Layer: 0
   m_Name: Office Desk
   m_TagString: Untagged
@@ -414,24 +435,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &8524290557846476098
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7139863614250715668}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.046350293, y: 0.022388013, z: 0.020217871}
-  m_Center: {x: 0.016329464, y: 0.010705619, z: 0.006528693}

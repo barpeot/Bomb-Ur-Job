@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour
     // daftar npc yang ngelihat player
     private HashSet<int> npcSeeingPlayer = new HashSet<int>();
 
+    // reference ke player
+    public GameObject player;
+
     private void Awake()
     {
         if (instance == null)
