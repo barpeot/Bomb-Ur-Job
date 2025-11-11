@@ -931,6 +931,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFullExposedBar: 0
   player: {fileID: 1276283342}
+  navMeshSurface: {fileID: 1303740269}
 --- !u!4 &644790685
 Transform:
   m_ObjectHideFlags: 0
@@ -1349,7 +1350,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &881408779
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1752,7 +1753,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1303740269
 MonoBehaviour:
   m_ObjectHideFlags: 0

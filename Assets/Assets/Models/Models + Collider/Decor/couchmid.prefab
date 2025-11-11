@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4392863585164746753}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: couchmid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,8 @@ GameObject:
   - component: {fileID: 7197550924299716152}
   - component: {fileID: 1704700311716287825}
   - component: {fileID: 2737124873524682899}
-  m_Layer: 0
+  - component: {fileID: 6955376375981224734}
+  m_Layer: 7
   m_Name: Couch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -142,3 +143,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.03437077, y: 0.017870884, z: 0.02151179}
   m_Center: {x: 0.014647172, y: 0.0064450074, z: 0.006674503}
+--- !u!208 &6955376375981224734
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7782731617953272163}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.018, y: 0.0085, z: 0.00925}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0.0145, y: 0.0065, z: 0.0065}
+  m_TimeToStationary: 0.5

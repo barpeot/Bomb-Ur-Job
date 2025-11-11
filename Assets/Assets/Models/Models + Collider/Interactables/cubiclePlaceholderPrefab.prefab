@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 5070541031924752528}
   - component: {fileID: 7419331881039919502}
   - component: {fileID: 8036061345874853943}
-  m_Layer: 0
+  - component: {fileID: 1201956981079817573}
+  m_Layer: 7
   m_Name: cubicle (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105,6 +106,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!208 &1201956981079817573
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2179858761339100793}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &2334936089854683446
 GameObject:
   m_ObjectHideFlags: 0
@@ -117,7 +134,8 @@ GameObject:
   - component: {fileID: 120545515814945816}
   - component: {fileID: 3273952114997741636}
   - component: {fileID: 6433300634359871907}
-  m_Layer: 0
+  - component: {fileID: 4183460845027881161}
+  m_Layer: 7
   m_Name: cubicle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -210,6 +228,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!208 &4183460845027881161
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2334936089854683446}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &4960876983693365434
 GameObject:
   m_ObjectHideFlags: 0
@@ -219,7 +253,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8821191832372584810}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: cubiclePlaceholderPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -256,7 +290,8 @@ GameObject:
   - component: {fileID: 3812351661904138180}
   - component: {fileID: 8720335170610680828}
   - component: {fileID: 5983044909363264175}
-  m_Layer: 0
+  - component: {fileID: 5145203546118176893}
+  m_Layer: 7
   m_Name: cubicle (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -349,3 +384,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!208 &5145203546118176893
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5924815752962443490}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5

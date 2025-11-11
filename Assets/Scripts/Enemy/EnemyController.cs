@@ -45,6 +45,9 @@ public class EnemyController : MonoBehaviour
 
         // set toleransi stopnya pathfinding
         agent.stoppingDistance = 0.2f;
+
+        // ambil patrol point dari  gamemanager
+        // patrolPoints = GameManager.instance.npcPatrolList;
     }
 
     // Start is called before the first frame update
