@@ -15,6 +15,7 @@ public class EnemyController : MonoBehaviour
     public NavMeshAgent agent;
     public Rigidbody rb;
     public GameObject explosionAsset;
+    public Animator anim;
 
     // [Header("State Machine")]
     // enemy state machine nya
@@ -46,6 +47,7 @@ public class EnemyController : MonoBehaviour
         stateMachine = new EnemyStateMachine();
 
         rb = GetComponent<Rigidbody>();
+        anim = GetComponent<Animator>();
 
         rb.isKinematic = true;
         rb.detectCollisions = false;
@@ -73,6 +75,10 @@ public class EnemyController : MonoBehaviour
     void Update()
     {
         // ngupdate
+
+        //TODO: Tolong Kak Nicho bantu betulin handle integrasi animasi musuh dengan state machine
+        anim.SetBool("isMoving", true);
+
         stateMachine.Update();
     }
 
@@ -128,6 +134,9 @@ public class EnemyController : MonoBehaviour
                 Instantiate(explosionAsset, rb.position, Quaternion.identity);
             rb.AddExplosionForce(150.0f, explosionPos, 5.0f, 3.0F);
         }
+        anim.SetBool("isMoving", false);
+        anim.SetBool("isDying", true);
+
         Debug.Log($"Enemy {name} died!");
 
         // start coroutine buat matinya, balik ke object pool
