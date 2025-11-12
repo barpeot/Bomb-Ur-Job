@@ -7,6 +7,7 @@ public class MainMenuController : MonoBehaviour
 {
     public GameObject tutorialMenu;
     public GameObject titleMenu;
+    public GameObject creditsMenu;
 
     public string gameScene;
 
@@ -24,6 +25,18 @@ public class MainMenuController : MonoBehaviour
     public void CloseTutorial()
     {
         tutorialMenu.SetActive(false);
+        titleMenu.SetActive(true);
+    }
+
+    public void OpenCredits()
+    {
+        creditsMenu.SetActive(true);
+        titleMenu.SetActive(false);
+    }
+
+    public void CloseCredits()
+    {
+        creditsMenu.SetActive(false);
         titleMenu.SetActive(true);
     }
 

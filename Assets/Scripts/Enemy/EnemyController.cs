@@ -12,6 +12,7 @@ public class EnemyController : MonoBehaviour
     public Transform player;
     // navmesh agent nya
     public NavMeshAgent agent;
+    public Rigidbody rb;
     public GameObject explosionAsset;
 
     // [Header("State Machine")]
@@ -38,6 +39,7 @@ public class EnemyController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         stateMachine = new EnemyStateMachine();
         npcID = GetComponentInChildren<EnemyVision>().npcID;
+        rb = GetComponent<Rigidbody>();
 
         patrolState = new EnemyPatrolState(this, stateMachine);
         chaseState = new EnemyChaseState(this, stateMachine);
@@ -88,8 +90,15 @@ public class EnemyController : MonoBehaviour
     
     public void Die()
     {
-        Instantiate(explosionAsset, transform.position, Quaternion.identity, null);
+        Vector3 explosionPos = transform.position;
+        Collider[] colliders = Physics.OverlapSphere(explosionPos, 5.0f);
+        foreach (Collider hit in colliders)
+        {
+            Rigidbody rb = hit.GetComponent<Rigidbody>();
+
+            if (rb != null)
+                rb.AddExplosionForce(150.0f, explosionPos, 5.0f, 3.0F);
+        }
         Debug.Log($"Enemy {name} died!");
-        Destroy(gameObject);
     }
 }

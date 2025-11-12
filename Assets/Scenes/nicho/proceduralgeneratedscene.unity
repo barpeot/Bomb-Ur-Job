@@ -1081,13 +1081,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: 0.6717078, y: -0.091100216, z: 0.24790694, w: 0.6921355}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 77.16, y: 68.619, z: 96.537}
 --- !u!1 &741204697
 GameObject:
   m_ObjectHideFlags: 0
@@ -2867,8 +2867,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1680885149}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8.8, y: -14.670525, z: 22.5}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2915,6 +2915,7 @@ MonoBehaviour:
   - {fileID: 326975755}
   player: {fileID: 1276283349}
   agent: {fileID: 0}
+  rb: {fileID: 0}
   explosionAsset: {fileID: 0}
   waitTimeAtPoint: 1
   npcID: 0
@@ -3966,7 +3967,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2053726435
 Transform:
   m_ObjectHideFlags: 0
@@ -3976,7 +3977,7 @@ Transform:
   m_GameObject: {fileID: 2053726434}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.5967696, y: 16.100525, z: -18.728834}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4285,12 +4286,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   patrolPoints:
-  - {fileID: 1344067482}
-  - {fileID: 1154681610}
+  - {fileID: 0}
   - {fileID: 2092012518}
   player: {fileID: 1276283349}
   agent: {fileID: 0}
-  explosionAsset: {fileID: 0}
+  rb: {fileID: 0}
+  explosionAsset: {fileID: 5197321310904529764, guid: d1a0420ded9ace04db1c68a37bff7ec0, type: 3}
   waitTimeAtPoint: 1
   npcID: 0
   checkRadius: 2
@@ -4702,15 +4703,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6291966745427545536, guid: d93827e9950417346b0942d63e501dd4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.94
+      value: 17.52
       objectReference: {fileID: 0}
     - target: {fileID: 6291966745427545536, guid: d93827e9950417346b0942d63e501dd4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -14.670525
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6291966745427545536, guid: d93827e9950417346b0942d63e501dd4, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 10.2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6291966745427545536, guid: d93827e9950417346b0942d63e501dd4, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4718,15 +4719,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6291966745427545536, guid: d93827e9950417346b0942d63e501dd4, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6291966745427545536, guid: d93827e9950417346b0942d63e501dd4, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6291966745427545536, guid: d93827e9950417346b0942d63e501dd4, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6291966745427545536, guid: d93827e9950417346b0942d63e501dd4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -4741,7 +4742,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 7457593091272514314, guid: d93827e9950417346b0942d63e501dd4, type: 3}
     - {fileID: 2249128162182038547, guid: d93827e9950417346b0942d63e501dd4, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
