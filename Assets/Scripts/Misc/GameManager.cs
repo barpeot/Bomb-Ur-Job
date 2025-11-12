@@ -15,16 +15,24 @@ public class GameManager : MonoBehaviour
     private string gameplayScene = "scene nicho";
 
     // daftar npc yang ngelihat player
-    private HashSet<int> npcSeeingPlayer = new HashSet<int>();
+    private HashSet<string> npcSeeingPlayer = new HashSet<string>();
 
     // daftar patrol point nya npc
-    public HashSet<Transform> npcPatrolList = new HashSet<Transform>();
+    public List<Transform> npcPatrolList = new List<Transform>();
 
     // reference ke player
     public GameObject player;
 
     // reference ke navmesh surface nya
     public NavMeshSurface navMeshSurface;
+
+    // jumlah npc yang mau di spawn
+    public int npcCount = 0;
+
+    // daftar ketiga spawn point npc
+    public Vector3 npcSpawnPointLeft;
+    public Vector3 npcSpawnPointTop;
+    public Vector3 npcSpawnPointRight;
 
     private void Awake()
     {
@@ -72,7 +80,7 @@ public class GameManager : MonoBehaviour
         npcPatrolList.Add(patrolLocation);
     }
 
-    private void HandlePlayerVisibilityChanged(int npcID, bool seeing)
+    private void HandlePlayerVisibilityChanged(string npcID, bool seeing)
     {
         if (seeing) npcSeeingPlayer.Add(npcID);
         else npcSeeingPlayer.Remove(npcID);

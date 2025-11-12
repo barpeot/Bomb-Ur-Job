@@ -51,8 +51,8 @@ public class EnemyCheckingState : EnemyState
             ObjectInteractable i = hit.GetComponent<ObjectInteractable>();
             // Debug.Log($"i != null = {i != null}");
             // Debug.Log($"i.isSabotaged = {i.isSabotaged}");
-            // Debug.Log($"i = {i}");
-            Debug.Log($"nama yang di hit = {hit.gameObject.name}");
+            // // Debug.Log($"i = {i}");
+            // Debug.Log($"nama yang di hit = {hit.gameObject.name}");
             if (i != null && i.isSabotaged)
             {
                 Debug.Log($"{enemy.name} found sabotaged object!");

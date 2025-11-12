@@ -7,6 +7,11 @@ using static UnityEditor.PlayerSettings;
 
 public class OfficeGenerator : MonoBehaviour
 {
+    [Header("NPC Count")]
+    public int npcCountSmall = 4;
+    public int npcCountMedium = 5;
+    public int npcCountLarge = 6;
+
     [Header("Non Interactables Count")]
     public int nonInteractablesCountSmall = 3;
     public int nonInteractablesCountMedium = 4;
@@ -131,6 +136,7 @@ public class OfficeGenerator : MonoBehaviour
                 maxInteractables = maxInteractablesCountSmall;
                 patrolPointCount = patrolPointCountSmall;
                 nonInteractablesCount = nonInteractablesCountSmall;
+                GameManager.instance.npcCount = npcCountSmall;
                 break;
             case MapSize.Medium: // kalau medium 18
                 widthGridCount = heightGridCount = mediumGridCount;
@@ -140,6 +146,7 @@ public class OfficeGenerator : MonoBehaviour
                 maxInteractables = maxInteractablesCountMedium;
                 patrolPointCount = patrolPointCountMedium;
                 nonInteractablesCount = nonInteractablesCountMedium;
+                GameManager.instance.npcCount = npcCountMedium;
                 break;
             case MapSize.Large: // kalau large 22
                 widthGridCount = heightGridCount = largeGridCount;
@@ -149,6 +156,7 @@ public class OfficeGenerator : MonoBehaviour
                 maxInteractables = maxInteractablesCountLarge;
                 patrolPointCount = patrolPointCountLarge;
                 nonInteractablesCount = nonInteractablesCountLarge;
+                GameManager.instance.npcCount = npcCountLarge;
                 break;
         }
 
@@ -202,11 +210,11 @@ public class OfficeGenerator : MonoBehaviour
         // player
         SpawnSpawnPoint(floorPlanePrefab, (widthGridCount / 2) - 2, -6, 4, 4);
         // npc atas
-        SpawnWall(floorPlanePrefab, (widthGridCount / 2) - 2, heightGridCount + 2, 4, 4);
+        SpawnNPCSpawnPoint(floorPlanePrefab, (widthGridCount / 2) - 2, heightGridCount + 2, 4, 4, "atas");
         // npc kiri
-        SpawnWall(floorPlanePrefab, -6, (heightGridCount / 2) - 2, 4, 4);
+        SpawnNPCSpawnPoint(floorPlanePrefab, -6, (heightGridCount / 2) - 2, 4, 4, "kiri");
         // npc kanan
-        SpawnWall(floorPlanePrefab, heightGridCount + 2, (heightGridCount / 2) - 2, 4, 4);
+        SpawnNPCSpawnPoint(floorPlanePrefab, heightGridCount + 2, (heightGridCount / 2) - 2, 4, 4, "kanan");
 
         // bikin all wallnya biar nutup si player
         // kiri spawn point
@@ -547,6 +555,31 @@ public class OfficeGenerator : MonoBehaviour
         newObj.transform.localScale = new Vector3(scaleX, newObj.transform.localScale.y, scaleY) * cellSize;
 
         GameManager.instance.player.transform.position = new Vector3(newObj.transform.position.x, 5, newObj.transform.position.z);
+    }
+
+    private void SpawnNPCSpawnPoint(GameObject prefab, float startingX, float startingY, float totalWidth, float totalHeight, string posisi)
+    {
+        float centerX = startingX + ((totalWidth - 1) / 2);
+        float centerY = startingY + ((totalHeight - 1) / 2);
+        float scaleX = totalWidth;
+        float scaleY = totalHeight;
+
+        Vector3 pos = new Vector3(centerX, prefab.transform.position.y, centerY) * cellSize;
+        GameObject newObj = Instantiate(prefab, pos, prefab.transform.rotation, transform);
+        newObj.transform.localScale = new Vector3(scaleX, newObj.transform.localScale.y, scaleY) * cellSize;
+
+        switch (posisi)
+        {
+            case "kiri":
+                GameManager.instance.npcSpawnPointLeft = new Vector3(newObj.transform.position.x, 0, newObj.transform.position.z);
+                break;
+            case "kanan":
+                GameManager.instance.npcSpawnPointRight = new Vector3(newObj.transform.position.x, 0, newObj.transform.position.z);
+                break;
+            case "atas":
+                GameManager.instance.npcSpawnPointTop = new Vector3(newObj.transform.position.x, 0, newObj.transform.position.z);
+                break;
+        }
     }
 
     private void OnDrawGizmos()

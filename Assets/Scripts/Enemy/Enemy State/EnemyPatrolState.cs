@@ -35,6 +35,9 @@ public class EnemyPatrolState : EnemyState
         // kalau patrolpoints nya nggak ada, maka skip
         if (enemy.patrolPoints.Length == 0) return;
 
+        // random dulu tujuan nya
+        currentPoint = Random.Range(0, enemy.patrolPoints.Length);
+
         // set destination selanjutnya
         enemy.agent.SetDestination(enemy.patrolPoints[currentPoint].position);
     }
@@ -50,7 +53,7 @@ public class EnemyPatrolState : EnemyState
         yield return new WaitForSeconds(enemy.waitTimeAtPoint);
 
         // tambahin currentpointnya
-        currentPoint = (currentPoint + 1) % enemy.patrolPoints.Length;
+        // currentPoint = (currentPoint + 1) % enemy.patrolPoints.Length;
 
         // langsung set tujuan kesana
         GoToNextPoint();

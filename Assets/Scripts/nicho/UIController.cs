@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class UIController : MonoBehaviour
 
     // reference ke ui you lose dan ui exposed pop up
     public GameObject youLoseUI, exposedPopUpUI;
+
+    // reference ke exposed barnya
+    public Image exposedBarImage;
 
     private void Awake()
     {

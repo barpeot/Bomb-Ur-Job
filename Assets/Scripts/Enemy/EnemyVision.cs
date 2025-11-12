@@ -8,10 +8,7 @@ using UnityEngine.UI;
 public class EnemyVision : MonoBehaviour
 {
     // npc keberapa
-    public int npcID;
-
-    // reference ke player gameobject nya
-    public GameObject player;
+    public string npcID;
 
     // detection range nya
     public float detectionRange = 10f;
@@ -20,16 +17,13 @@ public class EnemyVision : MonoBehaviour
     public float detectionAngle = 45f;
 
     // reference ke debug text nya
-    public TextMeshProUGUI isDetectedText;
-    public TextMeshProUGUI isInRangeOfConeText;
-    public TextMeshProUGUI isNotHiddenText;
+    // public TextMeshProUGUI isDetectedText;
+    // public TextMeshProUGUI isInRangeOfConeText;
+    // public TextMeshProUGUI isNotHiddenText;
 
     // exposed bar increase speed
     [SerializeField] private float exposedBarIncreaseSpeed = 0.01f;
     [SerializeField] private float currentBarSpeed = 0f;
-
-    // reference ke bar exposed nya
-    public Image exposedBarImage;
 
     // tracker, setiap 2 detik, kecepatannya naik
     [SerializeField] private float secondTracker = 0f;
@@ -40,10 +34,15 @@ public class EnemyVision : MonoBehaviour
     public bool isInRangeOfCone, isDetected, isNotHidden;
 
     // event untuk broadcast kalau npc see player
-    public static event Action<int, bool> OnPlayerVisibilityChanged;
+    public static event Action<string, bool> OnPlayerVisibilityChanged;
 
     // reference si npc lagi ngelihat player nggak
     private bool isSeeingPlayer;
+
+    private void Awake() {
+        // set unique id ke npc
+        npcID = System.Guid.NewGuid().ToString();
+    }
 
     private void Start()
     {
@@ -59,6 +58,9 @@ public class EnemyVision : MonoBehaviour
 
     private void EnemyDetection()
     {
+        // ambil player dari gamemanager
+        GameObject player = GameManager.instance.player;
+
         // set semuanya false dulu
         isInRangeOfCone = false;
         isDetected = false;
@@ -72,15 +74,15 @@ public class EnemyVision : MonoBehaviour
             isDetected = true;
 
             // set tulisan debug ui nya
-            isDetectedText.text = "player detected";
-            isDetectedText.color = Color.red;
+            // isDetectedText.text = "player detected";
+            // isDetectedText.color = Color.red;
         }
         else
         {
             // kalau nggak kedetect
             // set tulisan debug ui nya
-            isDetectedText.text = "player NOT detected";
-            isDetectedText.color = Color.green;
+            // isDetectedText.text = "player NOT detected";
+            // isDetectedText.color = Color.green;
         }
 
         // cek player hide atau nggak nya pakai raycast
@@ -91,22 +93,22 @@ public class EnemyVision : MonoBehaviour
             if (hit.transform == player.transform)
             {
                 isNotHidden = true;
-                isNotHiddenText.text = "player exposed";
-                isNotHiddenText.color = Color.red;
+                // isNotHiddenText.text = "player exposed";
+                // isNotHiddenText.color = Color.red;
             }
             else
             {
                 // nggak kenak player, maka hidden
-                isNotHiddenText.text = "player hidden";
-                isNotHiddenText.color = Color.green;
+                // isNotHiddenText.text = "player hidden";
+                // isNotHiddenText.color = Color.green;
             }
         }
         else
         {
             // pas nembak nggak kenak apa apa, maka ya hidden juga
             // set lagi tulisannya
-            isNotHiddenText.text = "player hidden";
-            isNotHiddenText.color = Color.green;
+            // isNotHiddenText.text = "player hidden";
+            // isNotHiddenText.color = Color.green;
         }
 
         // untuk deteksi apakah di dalam range conenya, dengan ngukur
@@ -123,13 +125,13 @@ public class EnemyVision : MonoBehaviour
         if (angle < detectionAngle && angle > detectionAngle * -1)
         {
             isInRangeOfCone = true;
-            isInRangeOfConeText.text = "player in detection angle";
-            isInRangeOfConeText.color = Color.red;
+            // isInRangeOfConeText.text = "player in detection angle";
+            // isInRangeOfConeText.color = Color.red;
         }
         else
         {
-            isInRangeOfConeText.text = "player outside detection angle";
-            isInRangeOfConeText.color = Color.green;
+            // isInRangeOfConeText.text = "player outside detection angle";
+            // isInRangeOfConeText.color = Color.green;
         }
 
 
@@ -154,12 +156,12 @@ public class EnemyVision : MonoBehaviour
     private IEnumerator IncreaseExposedBar()
     {
         // ambil dulu current level barnya
-        float currentLevel = exposedBarImage.fillAmount;
+        float currentLevel = UIController.instance.exposedBarImage.fillAmount;
 
         // tambahin setiap detik
         currentLevel += currentBarSpeed;
         currentLevel = Mathf.Clamp(currentLevel, 0, 1);
-        exposedBarImage.fillAmount = currentLevel;
+        UIController.instance.exposedBarImage.fillAmount = currentLevel;
         // tambahin tracker secondnya
         secondTracker++;
         yield return new WaitForSeconds(1f);

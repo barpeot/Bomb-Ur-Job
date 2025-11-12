@@ -42,17 +42,17 @@ public class EnemyPatrol : MonoBehaviour
     private void Awake()
     {
         // agent = GetComponent<NavMeshAgent>();
-        npcID = GetComponentInChildren<EnemyVision>().npcID;
+        // npcID = GetComponentInChildren<EnemyVision>().npcID;
     }
 
     private void OnEnable()
     {
         // event buat chase atau patrol nya
-        EnemyVision.OnPlayerVisibilityChanged += HandleChasePatrol;
+        // EnemyVision.OnPlayerVisibilityChanged += HandleChasePatrol;
     }
     
     private void OnDisable() {
-        EnemyVision.OnPlayerVisibilityChanged -= HandleChasePatrol;
+        // EnemyVision.OnPlayerVisibilityChanged -= HandleChasePatrol;
     }
     // end of kode nicho
 

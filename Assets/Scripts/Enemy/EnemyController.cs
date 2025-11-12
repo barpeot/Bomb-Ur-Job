@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -27,17 +29,20 @@ public class EnemyController : MonoBehaviour
     // waktu diem di tempat
     public float waitTimeAtPoint = 1f;
     // id npc nya
-    public int npcID;
+    public string npcID;
 
     [Header("Check Settings")]
     // dari kak akbar
     public float checkRadius = 0.5f;
     public float checkDuration = 2f;
 
+    // event ketika npc mati
+    public static event Action<GameObject> OnEnemyDie;
+
     private void Awake() {
+        player = GameManager.instance.player.transform;
         agent = GetComponent<NavMeshAgent>();
         stateMachine = new EnemyStateMachine();
-        npcID = GetComponentInChildren<EnemyVision>().npcID;
 
         patrolState = new EnemyPatrolState(this, stateMachine);
         chaseState = new EnemyChaseState(this, stateMachine);
@@ -47,12 +52,13 @@ public class EnemyController : MonoBehaviour
         agent.stoppingDistance = 0.2f;
 
         // ambil patrol point dari  gamemanager
-        // patrolPoints = GameManager.instance.npcPatrolList;
+        patrolPoints = GameManager.instance.npcPatrolList.ToArray();
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        npcID = GetComponentInChildren<EnemyVision>().npcID;
         // di initialize dulu state nya ke patrol
         stateMachine.Initialize(patrolState);
     }
@@ -76,7 +82,7 @@ public class EnemyController : MonoBehaviour
         EnemyVision.OnPlayerVisibilityChanged -= HandleChasePatrol;
     }
 
-    private void HandleChasePatrol(int id, bool seeing)
+    private void HandleChasePatrol(string id, bool seeing)
     {
         // kalau bukan dirinya, maka jangan kejar
         if (npcID != id) return;
@@ -90,6 +96,7 @@ public class EnemyController : MonoBehaviour
     {
         Instantiate(explosionAsset, transform.position, Quaternion.identity, null);
         Debug.Log($"Enemy {name} died!");
-        Destroy(gameObject);
+        // Destroy(gameObject);
+        OnEnemyDie?.Invoke(gameObject);
     }
 }
