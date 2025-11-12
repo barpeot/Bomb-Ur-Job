@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 198176233910093171}
   - component: {fileID: 1594740286457309276}
   m_Layer: 6
-  m_Name: Floor
+  m_Name: FloorKotak
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

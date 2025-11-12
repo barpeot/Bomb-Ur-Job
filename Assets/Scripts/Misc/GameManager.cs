@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,6 +16,15 @@ public class GameManager : MonoBehaviour
 
     // daftar npc yang ngelihat player
     private HashSet<int> npcSeeingPlayer = new HashSet<int>();
+
+    // daftar patrol point nya npc
+    public HashSet<Transform> npcPatrolList = new HashSet<Transform>();
+
+    // reference ke player
+    public GameObject player;
+
+    // reference ke navmesh surface nya
+    public NavMeshSurface navMeshSurface;
 
     private void Awake()
     {
@@ -34,11 +44,32 @@ public class GameManager : MonoBehaviour
         // ndengerin npc. kalau kedengeran, maka ngapain
         // maka akan munculin pop up exposed
         EnemyVision.OnPlayerVisibilityChanged += HandlePlayerVisibilityChanged;
+
+        // kalau udah selesai generate office, maka bake ulang navmeshsurfacenya
+        OfficeGenerator.OnFinishGenerateOffice += RebakeNavmeshSurface;
+
+        // kalau ada patrol point yang di add, maka tambahin kesini
+        OfficeGenerator.OnPatrolPointSpawned += AddPatrolList;
     }
 
-    private void OnDisable() {
+    private void OnDisable()
+    {
         // nggak usah subscribe lagi kalau diancurin
         EnemyVision.OnPlayerVisibilityChanged -= HandlePlayerVisibilityChanged;
+
+        OfficeGenerator.OnFinishGenerateOffice -= RebakeNavmeshSurface;
+
+        OfficeGenerator.OnPatrolPointSpawned -= AddPatrolList;
+    }
+
+    private void RebakeNavmeshSurface()
+    {
+        if (navMeshSurface != null) navMeshSurface.BuildNavMesh();
+    }
+    
+    private void AddPatrolList(Transform patrolLocation)
+    {
+        npcPatrolList.Add(patrolLocation);
     }
 
     private void HandlePlayerVisibilityChanged(int npcID, bool seeing)
