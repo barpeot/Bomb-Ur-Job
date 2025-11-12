@@ -1,10 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyController : MonoBehaviour
+public class EnemyControllerBackUp : MonoBehaviour
 {
     [Header("References")]
     // rute patroli
@@ -13,7 +14,6 @@ public class EnemyController : MonoBehaviour
     public Transform player;
     // navmesh agent nya
     public NavMeshAgent agent;
-    public Rigidbody rb;
     public GameObject explosionAsset;
 
     // [Header("State Machine")]
@@ -44,14 +44,9 @@ public class EnemyController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         stateMachine = new EnemyStateMachine();
 
-        rb = GetComponent<Rigidbody>();
-        
-        rb.isKinematic = true;
-        rb.detectCollisions = false;
-
-        patrolState = new EnemyPatrolState(this, stateMachine);
-        chaseState = new EnemyChaseState(this, stateMachine);
-        checkingState = new EnemyCheckingState(this, stateMachine);
+        // patrolState = new EnemyPatrolState(this, stateMachine);
+        // chaseState = new EnemyChaseState(this, stateMachine);
+        // checkingState = new EnemyCheckingState(this, stateMachine);
 
         // set toleransi stopnya pathfinding
         agent.stoppingDistance = 0.2f;
@@ -96,34 +91,12 @@ public class EnemyController : MonoBehaviour
         if (seeing) stateMachine.ChangeState(chaseState);
         else stateMachine.ChangeState(patrolState);
     }
-
+    
     public void Die()
     {
-        // Matikan NavMeshAgent biar gak bentrok sama physics
-        agent.enabled = false;
-
-        // Aktifkan physics
-        rb.isKinematic = false;
-        rb.detectCollisions = true;
-
-        Vector3 explosionPos = transform.position;
-        Collider[] colliders = Physics.OverlapSphere(explosionPos, 5.0f);
-        foreach (Collider hit in colliders)
-        {
-            Rigidbody rb = hit.GetComponent<Rigidbody>();
-
-            if (rb != null)
-                rb.AddExplosionForce(150.0f, explosionPos, 5.0f, 3.0F);
-        }
+        Instantiate(explosionAsset, transform.position, Quaternion.identity, null);
         Debug.Log($"Enemy {name} died!");
-
-        // start coroutine buat matinya, balik ke object pool
-        StartCoroutine(CoroutineDeath());
-    }
-    
-    private IEnumerator CoroutineDeath()
-    {
-        yield return new WaitForSeconds(5f);
+        // Destroy(gameObject);
         OnEnemyDie?.Invoke(gameObject);
     }
 }
