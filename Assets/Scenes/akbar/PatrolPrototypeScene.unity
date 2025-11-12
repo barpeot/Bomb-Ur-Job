@@ -155,7 +155,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isSabotaged: 0
+  timeToSabotage: 2
   sabotageDuration: 5
+  player: {fileID: 0}
+  playerController: {fileID: 0}
+  timerUI: {fileID: 0}
 --- !u!65 &181013259
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -611,7 +615,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isSabotaged: 0
+  timeToSabotage: 2
   sabotageDuration: 5
+  player: {fileID: 0}
+  playerController: {fileID: 0}
+  timerUI: {fileID: 0}
 --- !u!65 &848018391
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1459,6 +1467,12 @@ MonoBehaviour:
   targetPoint: 0
   moveSpeed: 4
   rotateSpeed: 30
+  checkRadius: 0.5
+  player: {fileID: 0}
+  isSeeing: 0
+  targetPosition: {x: 0, y: 0, z: 0}
+  currentState: 1
+  lastState: 1
 --- !u!54 &1680885151
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1823,7 +1837,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isSabotaged: 0
+  timeToSabotage: 2
   sabotageDuration: 5
+  player: {fileID: 0}
+  playerController: {fileID: 0}
+  timerUI: {fileID: 0}
 --- !u!65 &2102371337
 BoxCollider:
   m_ObjectHideFlags: 0

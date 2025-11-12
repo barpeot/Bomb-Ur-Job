@@ -113,6 +113,7 @@ public class EnemyController : MonoBehaviour
             Rigidbody rb = hit.GetComponent<Rigidbody>();
 
             if (rb != null)
+                Instantiate(explosionAsset, rb.position, Quaternion.identity);
                 rb.AddExplosionForce(150.0f, explosionPos, 5.0f, 3.0F);
         }
         Debug.Log($"Enemy {name} died!");
