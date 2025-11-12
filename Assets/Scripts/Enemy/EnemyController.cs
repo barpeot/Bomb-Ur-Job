@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -14,6 +12,7 @@ public class EnemyController : MonoBehaviour
     public Transform player;
     // navmesh agent nya
     public NavMeshAgent agent;
+    public Rigidbody rb;
     public GameObject explosionAsset;
 
     // [Header("State Machine")]
@@ -29,20 +28,18 @@ public class EnemyController : MonoBehaviour
     // waktu diem di tempat
     public float waitTimeAtPoint = 1f;
     // id npc nya
-    public string npcID;
+    public int npcID;
 
     [Header("Check Settings")]
     // dari kak akbar
     public float checkRadius = 0.5f;
     public float checkDuration = 2f;
 
-    // event ketika npc mati
-    public static event Action<GameObject> OnEnemyDie;
-
     private void Awake() {
-        player = GameManager.instance.player.transform;
         agent = GetComponent<NavMeshAgent>();
         stateMachine = new EnemyStateMachine();
+        npcID = GetComponentInChildren<EnemyVision>().npcID;
+        rb = GetComponent<Rigidbody>();
 
         patrolState = new EnemyPatrolState(this, stateMachine);
         chaseState = new EnemyChaseState(this, stateMachine);
@@ -52,13 +49,12 @@ public class EnemyController : MonoBehaviour
         agent.stoppingDistance = 0.2f;
 
         // ambil patrol point dari  gamemanager
-        patrolPoints = GameManager.instance.npcPatrolList.ToArray();
+        // patrolPoints = GameManager.instance.npcPatrolList;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        npcID = GetComponentInChildren<EnemyVision>().npcID;
         // di initialize dulu state nya ke patrol
         stateMachine.Initialize(patrolState);
     }
@@ -82,7 +78,7 @@ public class EnemyController : MonoBehaviour
         EnemyVision.OnPlayerVisibilityChanged -= HandleChasePatrol;
     }
 
-    private void HandleChasePatrol(string id, bool seeing)
+    private void HandleChasePatrol(int id, bool seeing)
     {
         // kalau bukan dirinya, maka jangan kejar
         if (npcID != id) return;
@@ -94,9 +90,15 @@ public class EnemyController : MonoBehaviour
     
     public void Die()
     {
-        Instantiate(explosionAsset, transform.position, Quaternion.identity, null);
+        Vector3 explosionPos = transform.position;
+        Collider[] colliders = Physics.OverlapSphere(explosionPos, 5.0f);
+        foreach (Collider hit in colliders)
+        {
+            Rigidbody rb = hit.GetComponent<Rigidbody>();
+
+            if (rb != null)
+                rb.AddExplosionForce(150.0f, explosionPos, 5.0f, 3.0F);
+        }
         Debug.Log($"Enemy {name} died!");
-        // Destroy(gameObject);
-        OnEnemyDie?.Invoke(gameObject);
     }
 }
