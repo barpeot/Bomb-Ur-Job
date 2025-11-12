@@ -41,6 +41,8 @@ public class EnemySpawner : MonoBehaviour
 
         // setelah create pool, kita spawn semuanya
         StartCoroutine(SpawnPelanPelan(jumlahNPC));
+
+        GameManager.instance.fillBar.fillAmount = 8 / 9;
     }
 
     private IEnumerator SpawnPelanPelan(int jumlah)
@@ -48,13 +50,13 @@ public class EnemySpawner : MonoBehaviour
         int jumlahSekarang = 0;
         while (jumlahSekarang < jumlah)
         {
-            SpawnNPC();
+            yield return StartCoroutine(SpawnNPC());
             jumlahSekarang++;
             yield return new WaitForSeconds(0.5f);
         }
     }
-    
-    private void SpawnNPC()
+
+    private IEnumerator SpawnNPC()
     {
         GameObject npc = GetNPC();
         // random positionnya dulu
@@ -65,6 +67,8 @@ public class EnemySpawner : MonoBehaviour
 
         // getcomponent dari si navmeshagent nya
         NavMeshAgent agentNPC = npc.GetComponent<NavMeshAgent>();
+
+        yield return new WaitForSeconds(0.1f);
 
         switch (randomPos)
         {
@@ -81,6 +85,8 @@ public class EnemySpawner : MonoBehaviour
                 // npc.transform.position = GameManager.instance.npcSpawnPointRight;
                 break;
         }
+
+        yield return new WaitForSeconds(0.1f);
     }
 
     // buat ngambil npc nya

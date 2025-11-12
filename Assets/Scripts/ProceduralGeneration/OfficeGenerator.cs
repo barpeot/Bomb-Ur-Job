@@ -1,9 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SearchService;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class OfficeGenerator : MonoBehaviour
 {
@@ -98,15 +96,15 @@ public class OfficeGenerator : MonoBehaviour
     public static event Action<Transform> OnPatrolPointSpawned;
 
     // Start is called before the first frame update
-    void Start()
+    IEnumerator Start()
     {
-        GenerateOffice();
+        yield return StartCoroutine(GenerateOffice());
 
         // udah selesai generate office, maka invoke
         OnFinishGenerateOffice?.Invoke();
     }
 
-    private void GenerateOffice()
+    private IEnumerator GenerateOffice()
     {
         // kalau seednya udah pernah digunakan maka initseednya
         if (usedSeed) UnityEngine.Random.InitState(seed);
@@ -164,10 +162,14 @@ public class OfficeGenerator : MonoBehaviour
         grid = new CellType[(int)widthGridCount, (int)heightGridCount];
 
         // generate floornya berdasarkan grid countnya
-        SpawnWall(floorPlanePrefab, 0, 0, widthGridCount, heightGridCount);
+        yield return StartCoroutine(SpawnWall(floorPlanePrefab, 0, 0, widthGridCount, heightGridCount));
+
+        GameManager.instance.fillBar.fillAmount = 1 / 9;
 
         // generate wallnya
-        GenerateOuterWall();
+        yield return StartCoroutine(GenerateOuterWall());
+
+        GameManager.instance.fillBar.fillAmount = 2 / 9;
 
         // set sebagai empty dulu semua grid di dalam wall
         for (int x = 1; x < widthGridCount - 1; x++)
@@ -179,57 +181,73 @@ public class OfficeGenerator : MonoBehaviour
         }
 
         // generate obstaclenya
-        GenerateRandomObstacles(obstacleCount);
+        yield return StartCoroutine(GenerateRandomObstacles(obstacleCount));
+
+        GameManager.instance.fillBar.fillAmount = 3 / 9;
 
         // generate interactablesnya
-        GenerateInteractables((int)minInteractables, (int)maxInteractables);
+        yield return StartCoroutine(GenerateInteractables((int)minInteractables, (int)maxInteractables));
+
+        GameManager.instance.fillBar.fillAmount = 4 / 9;
 
         // generate patrol point kosong nya
-        GeneratePatrolPoints((int)patrolPointCount);
+        yield return StartCoroutine(GeneratePatrolPoints((int)patrolPointCount));
+
+        GameManager.instance.fillBar.fillAmount = 5 / 9;
 
         // generate non interactablesnya
-        GenerateNonInteractables((int)nonInteractablesCount);
+        yield return StartCoroutine(GenerateNonInteractables((int)nonInteractablesCount));
+
+        GameManager.instance.fillBar.fillAmount = 6 / 9;
 
         // generate spawn point nya
-        GenerateSpawnPoint();
+        yield return StartCoroutine(GenerateSpawnPoint());
+
+        GameManager.instance.fillBar.fillAmount = 7 / 9;
     }
-    
-    private void GenerateSpawnPoint()
+
+    private IEnumerator GenerateSpawnPoint()
     {
         // bikin pathway untuk npc (3) dan player (1) (2x2 saja)
         // player
-        SpawnWall(floorPlanePrefab, (widthGridCount / 2) - 1, -2, 2, 2);
+        StartCoroutine(SpawnWall(floorPlanePrefab, (widthGridCount / 2) - 1, -2, 2, 2));
         // npc atas
-        SpawnWall(floorPlanePrefab, (widthGridCount / 2) - 1, heightGridCount, 2, 2);
+        StartCoroutine(SpawnWall(floorPlanePrefab, (widthGridCount / 2) - 1, heightGridCount, 2, 2));
         // npc kiri
-        SpawnWall(floorPlanePrefab, -2, (heightGridCount / 2) - 1, 2, 2);
+        StartCoroutine(SpawnWall(floorPlanePrefab, -2, (heightGridCount / 2) - 1, 2, 2));
         // npc kanan
-        SpawnWall(floorPlanePrefab, heightGridCount, (heightGridCount / 2) - 1, 2, 2);
+        StartCoroutine(SpawnWall(floorPlanePrefab, heightGridCount, (heightGridCount / 2) - 1, 2, 2));
+
+        yield return new WaitForSeconds(0.1f);
 
         // bikin spawn point untuk npc (3) dan player (1) (4x4 saja)
         // player
-        SpawnSpawnPoint(floorPlanePrefab, (widthGridCount / 2) - 2, -6, 4, 4);
+        StartCoroutine(SpawnSpawnPoint(floorPlanePrefab, (widthGridCount / 2) - 2, -6, 4, 4));
         // npc atas
-        SpawnNPCSpawnPoint(floorPlanePrefab, (widthGridCount / 2) - 2, heightGridCount + 2, 4, 4, "atas");
+        StartCoroutine(SpawnNPCSpawnPoint(floorPlanePrefab, (widthGridCount / 2) - 2, heightGridCount + 2, 4, 4, "atas"));
         // npc kiri
-        SpawnNPCSpawnPoint(floorPlanePrefab, -6, (heightGridCount / 2) - 2, 4, 4, "kiri");
+        StartCoroutine(SpawnNPCSpawnPoint(floorPlanePrefab, -6, (heightGridCount / 2) - 2, 4, 4, "kiri"));
         // npc kanan
-        SpawnNPCSpawnPoint(floorPlanePrefab, heightGridCount + 2, (heightGridCount / 2) - 2, 4, 4, "kanan");
+        StartCoroutine(SpawnNPCSpawnPoint(floorPlanePrefab, heightGridCount + 2, (heightGridCount / 2) - 2, 4, 4, "kanan"));
+
+        yield return new WaitForSeconds(0.1f);
 
         // bikin all wallnya biar nutup si player
         // kiri spawn point
-        SpawnWall(wallPrefab, (widthGridCount / 2) - 3, -6, 1, 4);
+        StartCoroutine(SpawnWall(wallPrefab, (widthGridCount / 2) - 3, -6, 1, 4));
         // kanan spawn point
-        SpawnWall(wallPrefab, (widthGridCount / 2) + 2, -6, 1, 4);
+        StartCoroutine(SpawnWall(wallPrefab, (widthGridCount / 2) + 2, -6, 1, 4));
         // bawah spawn point
-        SpawnWall(wallPrefab, (widthGridCount / 2) - 2, -7, 4, 1);
+        StartCoroutine(SpawnWall(wallPrefab, (widthGridCount / 2) - 2, -7, 4, 1));
         // atas kiri spawn point
-        SpawnWall(wallPrefab, (widthGridCount / 2) - 2, -2, 1, 2);
+        StartCoroutine(SpawnWall(wallPrefab, (widthGridCount / 2) - 2, -2, 1, 2));
         // atas kanan spawn point
-        SpawnWall(wallPrefab, (widthGridCount / 2) + 1, -2, 1, 2);
+        StartCoroutine(SpawnWall(wallPrefab, (widthGridCount / 2) + 1, -2, 1, 2));
+
+        yield return new WaitForSeconds(0.1f);
     }
 
-    private void GenerateNonInteractables(int count)
+    private IEnumerator GenerateNonInteractables(int count)
     {
         int spawned = 0;
         while (spawned < count)
@@ -242,7 +260,7 @@ public class OfficeGenerator : MonoBehaviour
                     //         y = 1-2
                     if (grid[x, y] == CellType.Empty &&
                     (x == 1 || x == 2 || x == widthGridCount - 1 || x == widthGridCount - 2) &&
-                    (y == 1 || y == 2 || y == heightGridCount - 1 || y == heightGridCount - 2) && 
+                    (y == 1 || y == 2 || y == heightGridCount - 1 || y == heightGridCount - 2) &&
                     (spawned < count))
                     {
                         // random dulu mau yang mana
@@ -260,7 +278,7 @@ public class OfficeGenerator : MonoBehaviour
                             int[] angles = { 0, 90, 180, 270 };
                             float rotY = angles[UnityEngine.Random.Range(0, angles.Length)];
 
-                            SpawnPrefab(nonInteractablesList[randomIndex], x, y, Quaternion.Euler(0, rotY, 0), false);
+                            StartCoroutine(SpawnPrefab(nonInteractablesList[randomIndex], x, y, Quaternion.Euler(0, rotY, 0), false));
                             spawned++;
 
                             // tag cell nya
@@ -270,9 +288,11 @@ public class OfficeGenerator : MonoBehaviour
                 }
             }
         }
+
+        yield return new WaitForSeconds(0.1f);
     }
 
-    private void GeneratePatrolPoints(int count)
+    private IEnumerator GeneratePatrolPoints(int count)
     {
         int spawned = 0;
         while (spawned < count)
@@ -286,7 +306,7 @@ public class OfficeGenerator : MonoBehaviour
                         bool peluangPatrolPoint = UnityEngine.Random.value < 0.01f;
                         if (peluangPatrolPoint)
                         {
-                            SpawnPrefab(patrolPointPrefab, x, y, Quaternion.identity, true);
+                            StartCoroutine(SpawnPrefab(patrolPointPrefab, x, y, Quaternion.identity, true));
                             spawned++;
                             grid[x, y] = CellType.NotEmpty;
                         }
@@ -295,29 +315,33 @@ public class OfficeGenerator : MonoBehaviour
                 }
             }
         }
+
+        yield return new WaitForSeconds(0.1f);
     }
 
-    private void GenerateOuterWall()
+    private IEnumerator GenerateOuterWall()
     {
         float startingGridOfFirstWallHorizVerti = 0;
         float startingGridOfSecondWallHoriz = (widthGridCount / 2) + 1;
         float startingGridOfSecondWallVerti = (heightGridCount / 2) + 1;
         float totalGridOfWallHorizVerti = (widthGridCount / 2) - 1;
         // horiz bawah
-        SpawnWall(wallPrefab, startingGridOfFirstWallHorizVerti, 0, totalGridOfWallHorizVerti, 1);
-        SpawnWall(wallPrefab, startingGridOfSecondWallHoriz, 0, totalGridOfWallHorizVerti, 1);
+        StartCoroutine(SpawnWall(wallPrefab, startingGridOfFirstWallHorizVerti, 0, totalGridOfWallHorizVerti, 1));
+        StartCoroutine(SpawnWall(wallPrefab, startingGridOfSecondWallHoriz, 0, totalGridOfWallHorizVerti, 1));
         // horiz atas
-        SpawnWall(wallPrefab, startingGridOfFirstWallHorizVerti, widthGridCount - 1, totalGridOfWallHorizVerti, 1);
-        SpawnWall(wallPrefab, startingGridOfSecondWallHoriz, widthGridCount - 1, totalGridOfWallHorizVerti, 1);
+        StartCoroutine(SpawnWall(wallPrefab, startingGridOfFirstWallHorizVerti, widthGridCount - 1, totalGridOfWallHorizVerti, 1));
+        StartCoroutine(SpawnWall(wallPrefab, startingGridOfSecondWallHoriz, widthGridCount - 1, totalGridOfWallHorizVerti, 1));
         // verti kiri
-        SpawnWall(wallPrefab, 0, startingGridOfFirstWallHorizVerti, 1, totalGridOfWallHorizVerti);
-        SpawnWall(wallPrefab, 0, startingGridOfSecondWallVerti, 1, totalGridOfWallHorizVerti);
+        StartCoroutine(SpawnWall(wallPrefab, 0, startingGridOfFirstWallHorizVerti, 1, totalGridOfWallHorizVerti));
+        StartCoroutine(SpawnWall(wallPrefab, 0, startingGridOfSecondWallVerti, 1, totalGridOfWallHorizVerti));
         // verti kanan
-        SpawnWall(wallPrefab, heightGridCount - 1, startingGridOfFirstWallHorizVerti, 1, totalGridOfWallHorizVerti);
-        SpawnWall(wallPrefab, heightGridCount - 1, startingGridOfSecondWallVerti, 1, totalGridOfWallHorizVerti);
+        StartCoroutine(SpawnWall(wallPrefab, heightGridCount - 1, startingGridOfFirstWallHorizVerti, 1, totalGridOfWallHorizVerti));
+        StartCoroutine(SpawnWall(wallPrefab, heightGridCount - 1, startingGridOfSecondWallVerti, 1, totalGridOfWallHorizVerti));
+
+        yield return new WaitForSeconds(0.1f);
     }
 
-    private void GenerateRandomObstacles(float obstacleCount)
+    private IEnumerator GenerateRandomObstacles(float obstacleCount)
     {
         for (int i = 0; i < obstacleCount; i++)
         {
@@ -341,7 +365,7 @@ public class OfficeGenerator : MonoBehaviour
             if (isHorizontal)
             {
                 // spawn
-                SpawnWall(wallPrefab, startingX, startingY, obstacleLength, 1);
+                StartCoroutine(SpawnWall(wallPrefab, startingX, startingY, obstacleLength, 1));
 
                 // tandain sebagai notempty dari starting ke ending
                 for (int x = (int)startingX; x < startingX + obstacleLength; x++) grid[x, (int)startingY] = CellType.NotEmpty;
@@ -349,15 +373,17 @@ public class OfficeGenerator : MonoBehaviour
             else
             {
                 // spawn
-                SpawnWall(wallPrefab, startingX, startingY, 1, obstacleLength);
+                StartCoroutine(SpawnWall(wallPrefab, startingX, startingY, 1, obstacleLength));
 
                 // tandain sebagai notempty dari starting ke ending
                 for (int y = (int)startingY; y < startingY + obstacleLength; y++) grid[(int)startingX, y] = CellType.NotEmpty;
             }
         }
+
+        yield return new WaitForSeconds(0.1f);
     }
 
-    private void GenerateInteractables(int min, int max)
+    private IEnumerator GenerateInteractables(int min, int max)
     {
         // random dulu berapa jumlahnya
         int count = UnityEngine.Random.Range(min, max + 1);
@@ -402,7 +428,7 @@ public class OfficeGenerator : MonoBehaviour
                 if (grid[(int)startingX, (int)row] == CellType.Empty && cubicleSpawned < cubicleCount)
                 {
                     Vector3 padding = rotY == 180f ? new Vector3(0.08f, 0f, 0.25f) : new Vector3(-0.08f, 0f, -0.25f);
-                    SpawnCubicleComputer("cubicle", (int)startingX, (int)row, rotY);
+                    StartCoroutine(SpawnCubicleComputer("cubicle", (int)startingX, (int)row, rotY));
                     grid[(int)startingX, (int)row] = CellType.Cubicle;
 
                     // spawn juga computernya dengan peluang 60%
@@ -411,7 +437,7 @@ public class OfficeGenerator : MonoBehaviour
                     {
                         // random rotasinya
                         float rotComY = rotY == 180f ? 270f : 90f;
-                        SpawnCubicleComputer("computer", (int)startingX, (int)row, rotComY);
+                        StartCoroutine(SpawnCubicleComputer("computer", (int)startingX, (int)row, rotComY));
                     }
 
                     // tambahin cubiclespawnednya
@@ -422,6 +448,8 @@ public class OfficeGenerator : MonoBehaviour
             }
             prevRow = row;
         }
+
+        yield return new WaitForSeconds(0.1f);
 
         // spawn printernya
         int printerSpawned = 0;
@@ -438,7 +466,7 @@ public class OfficeGenerator : MonoBehaviour
                         bool peluangPrinter = UnityEngine.Random.value < 0.01f;
                         if (peluangPrinter)
                         {
-                            SpawnPrefab(officePrinterPrefab, x, y, Quaternion.Euler(-90, 0, rotZ), true);
+                            StartCoroutine(SpawnPrefab(officePrinterPrefab, x, y, Quaternion.Euler(-90, 0, rotZ), true));
                             printerSpawned++;
                             grid[x, y] = CellType.NotEmpty;
                         }
@@ -447,6 +475,8 @@ public class OfficeGenerator : MonoBehaviour
                 }
             }
         }
+
+        yield return new WaitForSeconds(0.1f);
 
         // spawn dispensernya
         int dispenserSpawned = 0;
@@ -463,7 +493,7 @@ public class OfficeGenerator : MonoBehaviour
                         bool peluangDispenser = UnityEngine.Random.value < 0.01f;
                         if (peluangDispenser)
                         {
-                            SpawnPrefab(waterDispenserPrefab, x, y, Quaternion.Euler(-90, 0, rotZ), true);
+                            StartCoroutine(SpawnPrefab(waterDispenserPrefab, x, y, Quaternion.Euler(-90, 0, rotZ), true));
                             dispenserSpawned++;
                             grid[x, y] = CellType.NotEmpty;
                         }
@@ -472,18 +502,22 @@ public class OfficeGenerator : MonoBehaviour
                 }
             }
         }
+
+        yield return new WaitForSeconds(0.1f);
     }
 
-    private void SpawnPrefab(GameObject prefab, int x, int y, Quaternion rotation, bool isPatrolAdded)
+    private IEnumerator SpawnPrefab(GameObject prefab, int x, int y, Quaternion rotation, bool isPatrolAdded)
     {
         // posisi spawnnya
         Vector3 pos = new Vector3(x * cellSize, prefab.transform.position.y, y * cellSize);
         GameObject newObj = Instantiate(prefab, pos, rotation, transform);
 
         if (isPatrolAdded) OnPatrolPointSpawned?.Invoke(newObj.transform);
+
+        yield return new WaitForSeconds(0.1f);
     }
 
-    private void SpawnCubicleComputer(string cubiOrCompu, int x, int y, float rotY)
+    private IEnumerator SpawnCubicleComputer(string cubiOrCompu, int x, int y, float rotY)
     {
         // offset dasar cubicle
         float offsetZ = 0.28f;
@@ -516,6 +550,8 @@ public class OfficeGenerator : MonoBehaviour
             cubiOrCompu == "cubicle" ? cubiclePrefab : computerPrefab,
             x, y, Quaternion.Euler(0, rotY, 0), padding, cubiOrCompu == "computer" ? true : false
         );
+
+        yield return new WaitForSeconds(0.1f);
     }
 
     private void SpawnPrefab(GameObject prefab, int x, int y, Quaternion rotation, Vector3 padding, bool isPatrolAdded)
@@ -531,7 +567,7 @@ public class OfficeGenerator : MonoBehaviour
         if (isPatrolAdded) OnPatrolPointSpawned?.Invoke(newObj.transform);
     }
 
-    private void SpawnWall(GameObject prefab, float startingX, float startingY, float totalWidth, float totalHeight)
+    private IEnumerator SpawnWall(GameObject prefab, float startingX, float startingY, float totalWidth, float totalHeight)
     {
         float centerX = startingX + ((totalWidth - 1) / 2);
         float centerY = startingY + ((totalHeight - 1) / 2);
@@ -541,9 +577,11 @@ public class OfficeGenerator : MonoBehaviour
         Vector3 pos = new Vector3(centerX, prefab.transform.position.y, centerY) * cellSize;
         GameObject newObj = Instantiate(prefab, pos, prefab.transform.rotation, transform);
         newObj.transform.localScale = new Vector3(scaleX, newObj.transform.localScale.y, scaleY) * cellSize;
+
+        yield return new WaitForSeconds(0.1f);
     }
 
-    private void SpawnSpawnPoint(GameObject prefab, float startingX, float startingY, float totalWidth, float totalHeight)
+    private IEnumerator SpawnSpawnPoint(GameObject prefab, float startingX, float startingY, float totalWidth, float totalHeight)
     {
         float centerX = startingX + ((totalWidth - 1) / 2);
         float centerY = startingY + ((totalHeight - 1) / 2);
@@ -555,9 +593,11 @@ public class OfficeGenerator : MonoBehaviour
         newObj.transform.localScale = new Vector3(scaleX, newObj.transform.localScale.y, scaleY) * cellSize;
 
         GameManager.instance.player.transform.position = new Vector3(newObj.transform.position.x, 5, newObj.transform.position.z);
+
+        yield return new WaitForSeconds(0.1f);
     }
 
-    private void SpawnNPCSpawnPoint(GameObject prefab, float startingX, float startingY, float totalWidth, float totalHeight, string posisi)
+    private IEnumerator SpawnNPCSpawnPoint(GameObject prefab, float startingX, float startingY, float totalWidth, float totalHeight, string posisi)
     {
         float centerX = startingX + ((totalWidth - 1) / 2);
         float centerY = startingY + ((totalHeight - 1) / 2);
@@ -580,6 +620,8 @@ public class OfficeGenerator : MonoBehaviour
                 GameManager.instance.npcSpawnPointTop = new Vector3(newObj.transform.position.x, 0, newObj.transform.position.z);
                 break;
         }
+
+        yield return new WaitForSeconds(0.1f);
     }
 
     private void OnDrawGizmos()

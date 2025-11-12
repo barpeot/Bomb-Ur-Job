@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class GameManager : MonoBehaviour
     public bool isFullExposedBar = false;
 
     // nama gameplay scene nya
-    private string gameplayScene = "scene nicho";
+    public string gameplayScene = "proceduralgeneratedscene";
 
     // daftar npc yang ngelihat player
     private HashSet<string> npcSeeingPlayer = new HashSet<string>();
@@ -34,6 +35,9 @@ public class GameManager : MonoBehaviour
     public Vector3 npcSpawnPointTop;
     public Vector3 npcSpawnPointRight;
 
+    public Image fillBar;
+    public GameObject lodingskrin;
+
     private void Awake()
     {
         if (instance == null)
@@ -47,7 +51,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void OnEnable() {
+    private void OnEnable()
+    {
         // subscribe ke enemyvision. kaya lagi ngeset kuping buat
         // ndengerin npc. kalau kedengeran, maka ngapain
         // maka akan munculin pop up exposed
@@ -72,9 +77,23 @@ public class GameManager : MonoBehaviour
 
     private void RebakeNavmeshSurface()
     {
-        if (navMeshSurface != null) navMeshSurface.BuildNavMesh();
+        if (navMeshSurface != null) StartCoroutine(StartRebakeCoroutine());
     }
-    
+
+    private IEnumerator StartRebakeCoroutine()
+    {
+        yield return StartCoroutine(RebakeCoroutine());
+    }
+
+    private IEnumerator RebakeCoroutine()
+    {
+        yield return new WaitForSeconds(0.1f);
+        navMeshSurface.BuildNavMesh();
+        yield return new WaitForSeconds(0.1f);
+        fillBar.fillAmount = 9 / 9;
+        lodingskrin.SetActive(false);
+    }
+
     private void AddPatrolList(Transform patrolLocation)
     {
         npcPatrolList.Add(patrolLocation);
@@ -97,7 +116,7 @@ public class GameManager : MonoBehaviour
 
         if (UIController.instance != null)
             UIController.instance.exposedPopUpUI.SetActive(anySeeingPlayer);
-        
+
         if (isFullExposedBar)
         {
             UIController.instance.youLoseUI.SetActive(true);

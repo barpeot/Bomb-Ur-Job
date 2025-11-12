@@ -39,13 +39,14 @@ public class EnemyController : MonoBehaviour
     // event ketika npc mati
     public static event Action<GameObject> OnEnemyDie;
 
-    private void Awake() {
+    private void Awake()
+    {
         player = GameManager.instance.player.transform;
         agent = GetComponent<NavMeshAgent>();
         stateMachine = new EnemyStateMachine();
 
         rb = GetComponent<Rigidbody>();
-        
+
         rb.isKinematic = true;
         rb.detectCollisions = false;
 
@@ -79,6 +80,17 @@ public class EnemyController : MonoBehaviour
     {
         // subscribe ke event lagi ngelihat apa nggaknya
         EnemyVision.OnPlayerVisibilityChanged += HandleChasePatrol;
+
+        // reenabled the navmesh and disabled the rb
+        if (rb != null && !rb.isKinematic)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.isKinematic = true;
+            rb.detectCollisions = false;
+        }
+
+        if (agent != null) agent.enabled = true;
     }
 
     private void OnDisable()
@@ -114,14 +126,14 @@ public class EnemyController : MonoBehaviour
 
             if (rb != null)
                 Instantiate(explosionAsset, rb.position, Quaternion.identity);
-                rb.AddExplosionForce(150.0f, explosionPos, 5.0f, 3.0F);
+            rb.AddExplosionForce(150.0f, explosionPos, 5.0f, 3.0F);
         }
         Debug.Log($"Enemy {name} died!");
 
         // start coroutine buat matinya, balik ke object pool
         StartCoroutine(CoroutineDeath());
     }
-    
+
     private IEnumerator CoroutineDeath()
     {
         yield return new WaitForSeconds(5f);
