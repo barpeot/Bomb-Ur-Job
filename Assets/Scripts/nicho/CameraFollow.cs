@@ -5,6 +5,7 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
     // reference ke player
+    public GameObject gameManager;
     public GameObject player;
 
     // smooth nya

@@ -7,16 +7,22 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] public float speed = 6.0f;
     public bool canMove = true;
+    public bool isMoving = true;
     
     [SerializeField] private float horizontalInput;
     [SerializeField] private float verticalInput;
+    private float initialXrotation;
 
+    private Animator anim;
     private Rigidbody rb;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        anim = GetComponent<Animator>();
+
         rb.freezeRotation = true;
+        initialXrotation = transform.rotation.eulerAngles.x;
     }
 
     private Vector3 getMovement()
@@ -33,8 +39,10 @@ public class PlayerController : MonoBehaviour
     {
         if (movement != Vector3.zero)
         {
+            anim.SetBool("isMoving", true);
             //melakukan rotasi player objek ke arah movement
-            Quaternion targetRotation = Quaternion.LookRotation(movement);
+            float targetAngle = Mathf.Atan2(movement.x, movement.z) * Mathf.Rad2Deg;
+            Quaternion targetRotation = Quaternion.Euler(initialXrotation, targetAngle, 0f);
             targetRotation = Quaternion.RotateTowards(
                 transform.rotation,
                 targetRotation,
@@ -45,7 +53,8 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            return Quaternion.identity;
+            anim.SetBool("isMoving", false);
+            return transform.rotation;
         }
        
     }
@@ -59,11 +68,6 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 movement = getMovement();
         Quaternion targetRotation = getRotation(movement);
-
-        if (movement == Vector3.zero)
-        {
-            return;
-        }
 
         //TODO movement dengan akselerasi dari starting speed ke maxspeed
         if (canMove)
