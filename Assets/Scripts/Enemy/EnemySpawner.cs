@@ -14,13 +14,13 @@ public class EnemySpawner : MonoBehaviour
 
     private void OnEnable()
     {
-        OfficeGenerator.OnFinishGenerateOffice += CreateNPCPool;
+        GameManager.OnFinishRebake += CreateNPCPool;
         EnemyController.OnEnemyDie += ReturnNPC;
     }
 
     private void OnDisable()
     {
-        OfficeGenerator.OnFinishGenerateOffice -= CreateNPCPool;
+        GameManager.OnFinishRebake -= CreateNPCPool;
         EnemyController.OnEnemyDie += ReturnNPC;
     }
 
@@ -41,8 +41,6 @@ public class EnemySpawner : MonoBehaviour
 
         // setelah create pool, kita spawn semuanya
         StartCoroutine(SpawnPelanPelan(jumlahNPC));
-
-        GameManager.instance.fillBar.fillAmount = 8 / 9;
     }
 
     private IEnumerator SpawnPelanPelan(int jumlah)
@@ -54,6 +52,10 @@ public class EnemySpawner : MonoBehaviour
             jumlahSekarang++;
             yield return new WaitForSeconds(0.5f);
         }
+
+        GameManager.instance.fillBar.fillAmount = 10f / 10f;
+        UIController.instance.exposedPopUpUI.SetActive(false);
+        GameManager.instance.lodingskrin.SetActive(false);
     }
 
     private IEnumerator SpawnNPC()

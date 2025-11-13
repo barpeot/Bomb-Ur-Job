@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.AI.Navigation;
@@ -16,7 +17,7 @@ public class GameManager : MonoBehaviour
     public string gameplayScene = "proceduralgeneratedscene";
 
     // daftar npc yang ngelihat player
-    private HashSet<string> npcSeeingPlayer = new HashSet<string>();
+    public HashSet<string> npcSeeingPlayer = new HashSet<string>();
 
     // daftar patrol point nya npc
     public List<Transform> npcPatrolList = new List<Transform>();
@@ -37,6 +38,11 @@ public class GameManager : MonoBehaviour
 
     public Image fillBar;
     public GameObject lodingskrin;
+
+    public bool debuganyseeingplayer = false;
+    public int debugnpcseeingplayercount = 0;
+
+    public static event Action OnFinishRebake;
 
     private void Awake()
     {
@@ -78,6 +84,22 @@ public class GameManager : MonoBehaviour
     private void RebakeNavmeshSurface()
     {
         if (navMeshSurface != null) StartCoroutine(StartRebakeCoroutine());
+
+        // rebake juga lightingnya
+        StartCoroutine(RefreshLighting());
+
+        fillBar.fillAmount = 9f / 10f;
+
+        OnFinishRebake?.Invoke();
+    }
+
+    private IEnumerator RefreshLighting()
+    {
+        // Paksa Unity update lighting data runtime (untuk Realtime GI)
+        yield return new WaitForSeconds(0.1f);
+        DynamicGI.UpdateEnvironment();
+        Debug.Log("Realtime lighting updated!");
+        yield return new WaitForSeconds(0.1f);
     }
 
     private IEnumerator StartRebakeCoroutine()
@@ -90,8 +112,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         navMeshSurface.BuildNavMesh();
         yield return new WaitForSeconds(0.1f);
-        fillBar.fillAmount = 9 / 9;
-        lodingskrin.SetActive(false);
+        fillBar.fillAmount = 9f / 10f;
     }
 
     private void AddPatrolList(Transform patrolLocation)
@@ -113,11 +134,12 @@ public class GameManager : MonoBehaviour
     {
         // kita ambil dulu berapa banyak npc yang ngelihat plauyer
         bool anySeeingPlayer = npcSeeingPlayer.Count > 0;
+        debuganyseeingplayer = anySeeingPlayer;
+        debugnpcseeingplayercount = npcSeeingPlayer.Count;
 
-        if (UIController.instance != null)
+        if (UIController.instance != null && !isFullExposedBar)
             UIController.instance.exposedPopUpUI.SetActive(anySeeingPlayer);
-
-        if (isFullExposedBar)
+        else
         {
             UIController.instance.youLoseUI.SetActive(true);
             UIController.instance.exposedPopUpUI.SetActive(false);
@@ -131,8 +153,15 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         SceneManager.LoadScene(gameplayScene);
         isFullExposedBar = false;
+        UIController.instance.exposedBarImage.fillAmount = 0f;
         // all ui inactive
         UIController.instance.youLoseUI.SetActive(false);
         UIController.instance.exposedPopUpUI.SetActive(false);
+
+        // reset semuanya
+        npcPatrolList.Clear();
+        npcSeeingPlayer.Clear();
+        lodingskrin.SetActive(true);
+        fillBar.fillAmount = 0f;
     }
 }

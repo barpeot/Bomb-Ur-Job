@@ -63,6 +63,8 @@ public class OfficeGenerator : MonoBehaviour
     public GameObject floorPlanePrefab;
     // wallnya
     public GameObject[] wallPrefab;
+    // pintu
+    public GameObject doorPrefab;
 
     [Header("Prefabs Interactables")]
     // list prefabnya
@@ -96,6 +98,7 @@ public class OfficeGenerator : MonoBehaviour
     // Start is called before the first frame update
     IEnumerator Start()
     {
+        GameManager.instance.npcSeeingPlayer.Clear();
         yield return StartCoroutine(GenerateOffice());
 
         // udah selesai generate office, maka invoke
@@ -162,12 +165,14 @@ public class OfficeGenerator : MonoBehaviour
         // generate floornya berdasarkan grid countnya
         yield return StartCoroutine(SpawnWall(floorPlanePrefab, 0, 0, widthGridCount, heightGridCount));
 
-        GameManager.instance.fillBar.fillAmount = 1 / 9;
+        GameManager.instance.fillBar.fillAmount = 1f / 10f;
 
         // generate wallnya
         yield return StartCoroutine(GenerateOuterWall());
+        // generate pintunya
+        yield return StartCoroutine(GenerateDoor());
 
-        GameManager.instance.fillBar.fillAmount = 2 / 9;
+        GameManager.instance.fillBar.fillAmount = 2f / 10f;
 
         // set sebagai empty dulu semua grid di dalam wall
         for (int x = 1; x < widthGridCount - 1; x++)
@@ -181,27 +186,27 @@ public class OfficeGenerator : MonoBehaviour
         // generate obstaclenya
         yield return StartCoroutine(GenerateRandomObstacles(obstacleCount));
 
-        GameManager.instance.fillBar.fillAmount = 3 / 9;
+        GameManager.instance.fillBar.fillAmount = 3f / 10f;
 
         // generate interactablesnya
         yield return StartCoroutine(GenerateInteractables((int)minInteractables, (int)maxInteractables));
 
-        GameManager.instance.fillBar.fillAmount = 4 / 9;
+        GameManager.instance.fillBar.fillAmount = 4f / 10f;
 
         // generate patrol point kosong nya
         yield return StartCoroutine(GeneratePatrolPoints((int)patrolPointCount));
 
-        GameManager.instance.fillBar.fillAmount = 5 / 9;
+        GameManager.instance.fillBar.fillAmount = 5f / 10f;
 
         // generate non interactablesnya
         yield return StartCoroutine(GenerateNonInteractables((int)nonInteractablesCount));
 
-        GameManager.instance.fillBar.fillAmount = 6 / 9;
+        GameManager.instance.fillBar.fillAmount = 6f / 10f;
 
         // generate spawn point nya
         yield return StartCoroutine(GenerateSpawnPoint());
 
-        GameManager.instance.fillBar.fillAmount = 7 / 9;
+        GameManager.instance.fillBar.fillAmount = 7f / 10f;
     }
 
     private IEnumerator GenerateSpawnPoint()
@@ -348,6 +353,20 @@ public class OfficeGenerator : MonoBehaviour
         StartCoroutine(SpawnWall(wallPrefab[randomWallIndex], heightGridCount - 1, startingGridOfFirstWallHorizVerti, 1, totalGridOfWallHorizVerti));
         randomWallIndex = UnityEngine.Random.Range(0, wallPrefab.Length);
         StartCoroutine(SpawnWall(wallPrefab[randomWallIndex], heightGridCount - 1, startingGridOfSecondWallVerti, 1, totalGridOfWallHorizVerti));
+
+        yield return new WaitForSeconds(0.1f);
+    }
+
+    private IEnumerator GenerateDoor()
+    {
+        // atas
+        StartCoroutine(SpawnWall(doorPrefab, widthGridCount / 2 - 1, heightGridCount - 1, 2, 1));
+
+        // kiri
+        StartCoroutine(SpawnWall(doorPrefab, 0, heightGridCount / 2 - 1, 1, 2));
+
+        // kanan
+        StartCoroutine(SpawnWall(doorPrefab, widthGridCount - 1, heightGridCount / 2 - 1, 1, 2));
 
         yield return new WaitForSeconds(0.1f);
     }
