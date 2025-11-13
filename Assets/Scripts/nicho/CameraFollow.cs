@@ -5,8 +5,7 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
     // reference ke player
-    public GameObject gameManager;
-    public GameObject player;
+    [SerializeField] private GameObject player;
 
     // smooth nya
     public float smoothCam = 0.3f;
@@ -15,6 +14,11 @@ public class CameraFollow : MonoBehaviour
 
     // kecepatannya dibikin 0 aja
     Vector3 velocity = Vector3.zero;
+
+    private void Start()
+    {
+        player = GameManager.instance.player;
+    }
 
     // Update is called once per frame
     void LateUpdate()

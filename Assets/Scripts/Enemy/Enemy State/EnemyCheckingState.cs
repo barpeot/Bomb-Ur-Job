@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,17 +9,22 @@ public class EnemyCheckingState : EnemyState
     // constructor
     public EnemyCheckingState(EnemyController enemy, EnemyStateMachine stateMachine) : base(enemy, stateMachine)
     {
-        
+
     }
 
     public override void Enter()
     {
         // start coroutine untuk ngecek apakah di sabotage
         enemy.StartCoroutine(CheckRoutine());
+
+        // animasi
+        enemy.anim.SetBool("isMoving", false);
     }
 
     private IEnumerator CheckRoutine()
     {
+        // kalau npc mati maka skip
+        if (enemy.isDead) yield return null;
         // Debug.Log($"{enemy.name} is checking the area");
 
         // set dulu timernya ke 0 detik
@@ -44,6 +50,9 @@ public class EnemyCheckingState : EnemyState
 
     private void CheckNearbyInteractables()
     {
+        // kalau npc mati, maka skip
+        if (enemy.isDead) return;
+
         Collider[] hits = Physics.OverlapSphere(enemy.transform.position, enemy.checkRadius);
         // Debug.Log($"hits = {hits[0].gameObject.name}");
         foreach (Collider hit in hits)

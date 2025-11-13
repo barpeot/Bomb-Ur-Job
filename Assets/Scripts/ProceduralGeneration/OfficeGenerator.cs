@@ -62,9 +62,7 @@ public class OfficeGenerator : MonoBehaviour
     // floor plane
     public GameObject floorPlanePrefab;
     // wallnya
-    public GameObject wallPrefab;
-    // obstacle wallnya
-    public GameObject obstacleWallPrefab;
+    public GameObject[] wallPrefab;
 
     [Header("Prefabs Interactables")]
     // list prefabnya
@@ -234,15 +232,20 @@ public class OfficeGenerator : MonoBehaviour
 
         // bikin all wallnya biar nutup si player
         // kiri spawn point
-        StartCoroutine(SpawnWall(wallPrefab, (widthGridCount / 2) - 3, -6, 1, 4));
+        int randomWallIndex = UnityEngine.Random.Range(0, wallPrefab.Length);
+        StartCoroutine(SpawnWall(wallPrefab[randomWallIndex], (widthGridCount / 2) - 3, -6, 1, 4));
         // kanan spawn point
-        StartCoroutine(SpawnWall(wallPrefab, (widthGridCount / 2) + 2, -6, 1, 4));
+        randomWallIndex = UnityEngine.Random.Range(0, wallPrefab.Length);
+        StartCoroutine(SpawnWall(wallPrefab[randomWallIndex], (widthGridCount / 2) + 2, -6, 1, 4));
         // bawah spawn point
-        StartCoroutine(SpawnWall(wallPrefab, (widthGridCount / 2) - 2, -7, 4, 1));
+        randomWallIndex = UnityEngine.Random.Range(0, wallPrefab.Length);
+        StartCoroutine(SpawnWall(wallPrefab[randomWallIndex], (widthGridCount / 2) - 2, -7, 4, 1));
         // atas kiri spawn point
-        StartCoroutine(SpawnWall(wallPrefab, (widthGridCount / 2) - 2, -2, 1, 2));
+        randomWallIndex = UnityEngine.Random.Range(0, wallPrefab.Length);
+        StartCoroutine(SpawnWall(wallPrefab[randomWallIndex], (widthGridCount / 2) - 2, -2, 1, 2));
         // atas kanan spawn point
-        StartCoroutine(SpawnWall(wallPrefab, (widthGridCount / 2) + 1, -2, 1, 2));
+        randomWallIndex = UnityEngine.Random.Range(0, wallPrefab.Length);
+        StartCoroutine(SpawnWall(wallPrefab[randomWallIndex], (widthGridCount / 2) + 1, -2, 1, 2));
 
         yield return new WaitForSeconds(0.1f);
     }
@@ -326,17 +329,25 @@ public class OfficeGenerator : MonoBehaviour
         float startingGridOfSecondWallVerti = (heightGridCount / 2) + 1;
         float totalGridOfWallHorizVerti = (widthGridCount / 2) - 1;
         // horiz bawah
-        StartCoroutine(SpawnWall(wallPrefab, startingGridOfFirstWallHorizVerti, 0, totalGridOfWallHorizVerti, 1));
-        StartCoroutine(SpawnWall(wallPrefab, startingGridOfSecondWallHoriz, 0, totalGridOfWallHorizVerti, 1));
+        int randomWallIndex = UnityEngine.Random.Range(0, wallPrefab.Length);
+        StartCoroutine(SpawnWall(wallPrefab[randomWallIndex], startingGridOfFirstWallHorizVerti, 0, totalGridOfWallHorizVerti, 1));
+        randomWallIndex = UnityEngine.Random.Range(0, wallPrefab.Length);
+        StartCoroutine(SpawnWall(wallPrefab[randomWallIndex], startingGridOfSecondWallHoriz, 0, totalGridOfWallHorizVerti, 1));
         // horiz atas
-        StartCoroutine(SpawnWall(wallPrefab, startingGridOfFirstWallHorizVerti, widthGridCount - 1, totalGridOfWallHorizVerti, 1));
-        StartCoroutine(SpawnWall(wallPrefab, startingGridOfSecondWallHoriz, widthGridCount - 1, totalGridOfWallHorizVerti, 1));
+        randomWallIndex = UnityEngine.Random.Range(0, wallPrefab.Length);
+        StartCoroutine(SpawnWall(wallPrefab[randomWallIndex], startingGridOfFirstWallHorizVerti, widthGridCount - 1, totalGridOfWallHorizVerti, 1));
+        randomWallIndex = UnityEngine.Random.Range(0, wallPrefab.Length);
+        StartCoroutine(SpawnWall(wallPrefab[randomWallIndex], startingGridOfSecondWallHoriz, widthGridCount - 1, totalGridOfWallHorizVerti, 1));
         // verti kiri
-        StartCoroutine(SpawnWall(wallPrefab, 0, startingGridOfFirstWallHorizVerti, 1, totalGridOfWallHorizVerti));
-        StartCoroutine(SpawnWall(wallPrefab, 0, startingGridOfSecondWallVerti, 1, totalGridOfWallHorizVerti));
+        randomWallIndex = UnityEngine.Random.Range(0, wallPrefab.Length);
+        StartCoroutine(SpawnWall(wallPrefab[randomWallIndex], 0, startingGridOfFirstWallHorizVerti, 1, totalGridOfWallHorizVerti));
+        randomWallIndex = UnityEngine.Random.Range(0, wallPrefab.Length);
+        StartCoroutine(SpawnWall(wallPrefab[randomWallIndex], 0, startingGridOfSecondWallVerti, 1, totalGridOfWallHorizVerti));
         // verti kanan
-        StartCoroutine(SpawnWall(wallPrefab, heightGridCount - 1, startingGridOfFirstWallHorizVerti, 1, totalGridOfWallHorizVerti));
-        StartCoroutine(SpawnWall(wallPrefab, heightGridCount - 1, startingGridOfSecondWallVerti, 1, totalGridOfWallHorizVerti));
+        randomWallIndex = UnityEngine.Random.Range(0, wallPrefab.Length);
+        StartCoroutine(SpawnWall(wallPrefab[randomWallIndex], heightGridCount - 1, startingGridOfFirstWallHorizVerti, 1, totalGridOfWallHorizVerti));
+        randomWallIndex = UnityEngine.Random.Range(0, wallPrefab.Length);
+        StartCoroutine(SpawnWall(wallPrefab[randomWallIndex], heightGridCount - 1, startingGridOfSecondWallVerti, 1, totalGridOfWallHorizVerti));
 
         yield return new WaitForSeconds(0.1f);
     }
@@ -365,7 +376,8 @@ public class OfficeGenerator : MonoBehaviour
             if (isHorizontal)
             {
                 // spawn
-                StartCoroutine(SpawnWall(wallPrefab, startingX, startingY, obstacleLength, 1));
+                int randomWallIndex = UnityEngine.Random.Range(0, wallPrefab.Length);
+                StartCoroutine(SpawnWall(wallPrefab[randomWallIndex], startingX, startingY, obstacleLength, 1));
 
                 // tandain sebagai notempty dari starting ke ending
                 for (int x = (int)startingX; x < startingX + obstacleLength; x++) grid[x, (int)startingY] = CellType.NotEmpty;
@@ -373,7 +385,8 @@ public class OfficeGenerator : MonoBehaviour
             else
             {
                 // spawn
-                StartCoroutine(SpawnWall(wallPrefab, startingX, startingY, 1, obstacleLength));
+                int randomWallIndex = UnityEngine.Random.Range(0, wallPrefab.Length);
+                StartCoroutine(SpawnWall(wallPrefab[randomWallIndex], startingX, startingY, 1, obstacleLength));
 
                 // tandain sebagai notempty dari starting ke ending
                 for (int y = (int)startingY; y < startingY + obstacleLength; y++) grid[(int)startingX, y] = CellType.NotEmpty;

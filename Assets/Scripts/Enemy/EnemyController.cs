@@ -14,7 +14,6 @@ public class EnemyController : MonoBehaviour
     // navmesh agent nya
     public NavMeshAgent agent;
     public Rigidbody rb;
-    public GameObject explosionAsset;
     public Animator anim;
 
     // [Header("State Machine")]
@@ -25,6 +24,7 @@ public class EnemyController : MonoBehaviour
     // chase state
     public EnemyChaseState chaseState;
     public EnemyCheckingState checkingState;
+    public EnemyDieState dieState;
 
     [Header("Settings")]
     // waktu diem di tempat
@@ -39,6 +39,9 @@ public class EnemyController : MonoBehaviour
 
     // event ketika npc mati
     public static event Action<GameObject> OnEnemyDie;
+
+    // mati nggak
+    public bool isDead = false;
 
     private void Awake()
     {
@@ -55,6 +58,7 @@ public class EnemyController : MonoBehaviour
         patrolState = new EnemyPatrolState(this, stateMachine);
         chaseState = new EnemyChaseState(this, stateMachine);
         checkingState = new EnemyCheckingState(this, stateMachine);
+        dieState = new EnemyDieState(this, stateMachine);
 
         // set toleransi stopnya pathfinding
         agent.stoppingDistance = 0.2f;
@@ -77,7 +81,7 @@ public class EnemyController : MonoBehaviour
         // ngupdate
 
         //TODO: Tolong Kak Nicho bantu betulin handle integrasi animasi musuh dengan state machine
-        anim.SetBool("isMoving", true);
+        // anim.SetBool("isMoving", true);
 
         stateMachine.Update();
     }
@@ -117,27 +121,7 @@ public class EnemyController : MonoBehaviour
 
     public void Die()
     {
-        // Matikan NavMeshAgent biar gak bentrok sama physics
-        agent.enabled = false;
-
-        // Aktifkan physics
-        rb.isKinematic = false;
-        rb.detectCollisions = true;
-
-        Vector3 explosionPos = transform.position;
-        Collider[] colliders = Physics.OverlapSphere(explosionPos, 5.0f);
-        foreach (Collider hit in colliders)
-        {
-            Rigidbody rb = hit.GetComponent<Rigidbody>();
-
-            if (rb != null)
-                Instantiate(explosionAsset, rb.position, Quaternion.identity);
-            rb.AddExplosionForce(150.0f, explosionPos, 5.0f, 3.0F);
-        }
-        anim.SetBool("isMoving", false);
-        anim.SetBool("isDying", true);
-
-        Debug.Log($"Enemy {name} died!");
+        stateMachine.ChangeState(dieState);
 
         // start coroutine buat matinya, balik ke object pool
         StartCoroutine(CoroutineDeath());
@@ -147,5 +131,24 @@ public class EnemyController : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         OnEnemyDie?.Invoke(gameObject);
+    }
+
+    public void SpawnExplosionFX()
+    {
+        // pakai object pooling
+        GameObject fx = ExplosionPool.instance.GetFromPool();
+        fx.transform.position = transform.position + Vector3.up * 0.5f;
+        fx.SetActive(true);
+
+        // kalau udah masuk legi ke obj pool
+        StartCoroutine(ReturnFXToPool(fx));
+    }
+
+    private IEnumerator ReturnFXToPool(GameObject fx)
+    {
+        // setelah 2 detik bakalan balik
+        yield return new WaitForSeconds(2f);
+        fx.SetActive(false);
+        ExplosionPool.instance.ReturnToPool(fx);
     }
 }
