@@ -10,6 +10,7 @@ public class UIController : MonoBehaviour
 
     // reference ke ui you lose dan ui exposed pop up
     public GameObject youLoseUI, exposedPopUpUI;
+    public GameManager gamemanager;
 
     // reference ke exposed barnya
     public Image exposedBarImage;
