@@ -49,8 +49,8 @@ public class UIController : MonoBehaviour
     private void UpdateEnemyCount()
     {
         int npcCountMax = GameManager.instance.npcCount;
-        int npcCountActive = enmy.npcPool.Count;
+        int npcCountActive = EnemySpawner.instance.ActiveEnemies;
 
-        npcCountText.text = npcCountActive.ToString() + " / " + npcCountMax.ToString();
+        npcCountText.text = (npcCountMax - npcCountActive).ToString() + " / " + npcCountMax.ToString();
     }
 }

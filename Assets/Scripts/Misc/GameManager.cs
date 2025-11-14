@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -15,6 +16,7 @@ public class GameManager : MonoBehaviour
 
     // nama gameplay scene nya
     public string gameplayScene = "proceduralgeneratedscene";
+    public string mainMenuScene = "copyMainMenu";
 
     // daftar npc yang ngelihat player
     public HashSet<string> npcSeeingPlayer = new HashSet<string>();
@@ -137,6 +139,8 @@ public class GameManager : MonoBehaviour
 
         // kalau fully exposed maka stop gamenya
         EnemyVision.OnFullyExposed += GameLose;
+
+        EnemySpawner.OnAllEnemiesDead += GameWin;
     }
 
     private void OnDisable()
@@ -149,6 +153,8 @@ public class GameManager : MonoBehaviour
         OfficeGenerator.OnPatrolPointSpawned -= AddPatrolList;
 
         EnemyVision.OnFullyExposed -= GameLose;
+
+        EnemySpawner.OnAllEnemiesDead -= GameWin;
     }
 
     private void RebakeNavmeshSurface()
@@ -212,6 +218,17 @@ public class GameManager : MonoBehaviour
 
     private void GameLose()
     {
+        TextMeshProUGUI resultText = UIController.instance.youLoseUI.GetComponentInChildren<Image>().GetComponentInChildren<TextMeshProUGUI>();
+        resultText.text = "You Lose!!!";
+        UIController.instance.youLoseUI.SetActive(true);
+        UIController.instance.exposedPopUpUI.SetActive(false);
+        Time.timeScale = 0;
+    }
+
+    private void GameWin()
+    {
+        TextMeshProUGUI resultText = UIController.instance.youLoseUI.GetComponentInChildren<Image>().GetComponentInChildren<TextMeshProUGUI>();
+        resultText.text = "You Win!!!";
         UIController.instance.youLoseUI.SetActive(true);
         UIController.instance.exposedPopUpUI.SetActive(false);
         Time.timeScale = 0;
@@ -233,5 +250,14 @@ public class GameManager : MonoBehaviour
         npcSeeingPlayer.Clear();
         lodingskrin.SetActive(true);
         fillBar.fillAmount = 0f;
+    }
+
+    public void toMainMenu()
+    {
+        Destroy(GameManager.instance.gameObject);
+        Destroy(UIController.instance.gameObject);
+        Time.timeScale = 1;
+
+        SceneManager.LoadScene(mainMenuScene);
     }
 }

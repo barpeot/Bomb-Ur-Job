@@ -6,11 +6,26 @@ using UnityEngine.AI;
 
 public class EnemySpawner : MonoBehaviour
 {
+    public static EnemySpawner instance;
+
     // reference ke npc yang mau di spawn
     public GameObject npcPrefab;
 
     // object pooling
     public Queue<GameObject> npcPool = new Queue<GameObject>();
+
+    public static event Action OnAllEnemiesDead;
+
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
+    public int ActiveEnemies
+    {
+        get { return GameManager.instance.npcCount - npcPool.Count; }
+    }
 
     private void OnEnable()
     {
@@ -21,7 +36,7 @@ public class EnemySpawner : MonoBehaviour
     private void OnDisable()
     {
         GameManager.OnFinishRebake -= CreateNPCPool;
-        EnemyController.OnEnemyDie += ReturnNPC;
+        EnemyController.OnEnemyDie -= ReturnNPC;
     }
 
     // buat ngebikin poolnya apabila udah selesai generate office
@@ -114,5 +129,10 @@ public class EnemySpawner : MonoBehaviour
         // matikin dulu baru masukin lagi ke queue
         npcObj.SetActive(false);
         npcPool.Enqueue(npcObj);
+
+        if (ActiveEnemies == 0)
+        {
+            OnAllEnemiesDead?.Invoke();
+        }
     }
 }
