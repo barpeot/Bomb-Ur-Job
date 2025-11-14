@@ -99,6 +99,7 @@ public class OfficeGenerator : MonoBehaviour
     IEnumerator Start()
     {
         GameManager.instance.npcSeeingPlayer.Clear();
+        Debug.Log(Time.timeScale);
         yield return StartCoroutine(GenerateOffice());
 
         // udah selesai generate office, maka invoke

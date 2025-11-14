@@ -41,7 +41,8 @@ public class EnemyVision : MonoBehaviour
 
     public static event Action OnFullyExposed;
 
-    private void Awake() {
+    private void Awake()
+    {
         // set unique id ke npc
         npcID = System.Guid.NewGuid().ToString();
     }
@@ -166,6 +167,12 @@ public class EnemyVision : MonoBehaviour
         currentLevel += currentBarSpeed;
         currentLevel = Mathf.Clamp(currentLevel, 0, 1);
         UIController.instance.exposedBarImage.fillAmount = currentLevel;
+        if (currentLevel == 0) UIController.instance.bgExposedBar.fillAmount = 0f;
+        else
+        {
+            float bgBarLevel = currentLevel + 0.1f;
+            UIController.instance.bgExposedBar.fillAmount = Mathf.Clamp(bgBarLevel, 0, 1);
+        }
         // tambahin tracker secondnya
         secondTracker++;
         yield return new WaitForSeconds(1f);

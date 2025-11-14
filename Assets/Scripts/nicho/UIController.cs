@@ -16,7 +16,7 @@ public class UIController : MonoBehaviour
     private EnemySpawner enmy;
 
     // reference ke exposed barnya
-    public Image exposedBarImage;
+    public Image exposedBarImage, bgExposedBar;
 
     private void Awake()
     {
