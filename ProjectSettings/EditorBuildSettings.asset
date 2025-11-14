@@ -5,9 +5,12 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/akbar/Menus/Main Menu.unity
     guid: ca31ed70ed2a01a4da3780aba75fbd2a
+  - enabled: 1
+    path: Assets/Scenes/nicho/copyMainMenu.unity
+    guid: 5dde0104a244198428e606e1eabcc35c
   - enabled: 1
     path: Assets/Scenes/nicho/proceduralgeneratedscene.unity
     guid: 5bf4ea4263442294abd3ecee0173e0b7
