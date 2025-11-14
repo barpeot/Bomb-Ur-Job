@@ -17,6 +17,11 @@ public class EnemyChaseState : EnemyState
 
         // animasi
         enemy.anim.SetBool("isMoving", true);
+
+        // ganti audio ke chase
+        if (!enemy.isChasing) GameManager.instance.PlayChaseBGM();
+
+        enemy.isChasing = true;
     }
 
     public override void LogicUpdate()
@@ -32,5 +37,10 @@ public class EnemyChaseState : EnemyState
     {
         // reset path nya, biar dia nggak nyangkut pas balik lagi ke patrol
         enemy.agent.ResetPath();
+
+        // balik audio ke normal
+        if (enemy.isChasing) GameManager.instance.PlayNormalBGM();
+
+        enemy.isChasing = false;
     }
 }

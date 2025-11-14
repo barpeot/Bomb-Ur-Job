@@ -43,6 +43,9 @@ public class EnemyController : MonoBehaviour
     // mati nggak
     public bool isDead = false;
 
+    // ngejar kaga
+    public bool isChasing = false;
+
     private void Awake()
     {
         player = GameManager.instance.player.transform;
@@ -139,6 +142,9 @@ public class EnemyController : MonoBehaviour
         GameObject fx = ExplosionPool.instance.GetFromPool();
         fx.transform.position = transform.position + Vector3.up * 0.5f;
         fx.SetActive(true);
+
+        // kasih suara juga SFX
+        GameManager.instance.SFXSource.PlayOneShot(GameManager.instance.explosionSFX);
 
         // kalau udah masuk legi ke obj pool
         StartCoroutine(ReturnFXToPool(fx));

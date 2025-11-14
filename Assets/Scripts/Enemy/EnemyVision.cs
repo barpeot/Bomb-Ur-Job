@@ -39,6 +39,8 @@ public class EnemyVision : MonoBehaviour
     // reference si npc lagi ngelihat player nggak
     private bool isSeeingPlayer;
 
+    public static event Action OnFullyExposed;
+
     private void Awake() {
         // set unique id ke npc
         npcID = System.Guid.NewGuid().ToString();
@@ -155,6 +157,8 @@ public class EnemyVision : MonoBehaviour
 
     private IEnumerator IncreaseExposedBar()
     {
+        if (GameManager.instance.isFullExposedBar) yield return null;
+
         // ambil dulu current level barnya
         float currentLevel = UIController.instance.exposedBarImage.fillAmount;
 
@@ -173,7 +177,12 @@ public class EnemyVision : MonoBehaviour
         }
 
         // kalau udah full, set full
-        if (currentLevel == 1) GameManager.instance.isFullExposedBar = true;
+        if (currentLevel == 1)
+        {
+            GameManager.instance.isFullExposedBar = true;
+
+            OnFullyExposed?.Invoke();
+        }
 
         // infinite loop
         StartCoroutine(IncreaseExposedBar());

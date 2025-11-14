@@ -88,6 +88,10 @@ public class ObjectInteractable : MonoBehaviour, IInteractable
 
     private IEnumerator CountdownTimer(float duration)
     {
+        // play audio ticking nya
+        GameManager.instance.SFXSource.clip = GameManager.instance.tickingSFX;
+        GameManager.instance.SFXSource.Play();
+
         float clock = 0f;
         timerUI.fillAmount = 1f;
 
@@ -103,5 +107,7 @@ public class ObjectInteractable : MonoBehaviour, IInteractable
         Debug.Log("Item has stopped being sabotaged!");
         SetSabotage(false);
 
+        // stop audio ticking nya
+        GameManager.instance.SFXSource.Stop();
     }
 }
